@@ -16,6 +16,8 @@ All paths defined in the ["`exports`"](#exports) must be relative file URLs star
 
 Within a package, the values defined in the package's `package.json` ["`exports`"](#exports) field can be referenced via the package's name. For example, assuming the `package.json` is:
 
+在包里，在包的`package.json`的["`exports`"](#exports)中定义的值可以被包的名字引用。例如，假设`package.json`是下面这样：
+
 ```json
     // package.json
     {
@@ -92,3 +94,59 @@ When using the ["`exports`"](#exports) field, custom subpaths can be defined alo
 
 Now only the defined subpath in "exports" can be imported by a consumer:
 
+```js
+    import submodule from 'es-module-package/submodule.js';
+    // Loads ./node_modules/es-module-package/src/submodule.js 
+```
+
+While other subpaths will error:
+
+```js
+    import submodule from 'es-module-package/private-module.js';
+    // Throws ERR_PACKAGE_PATH_NOT_EXPORTED 
+```
+
+### Extensions in subpaths
+
+Package authors should provide either extensioned (import 'pkg/subpath.js') or extensionless (import 'pkg/subpath') subpaths in their exports. This ensures that there is only one subpath for each exported module so that all dependents import the same consistent specifier, keeping the package contract clear for consumers and simplifying package subpath completions.
+
+Traditionally, packages tended to use the extensionless style, which has the benefits of readability and of masking the true path of the file within the package.
+
+With import maps now providing a standard for package resolution in browsers and other JavaScript runtimes, using the extensionless style can result in bloated import map definitions. Explicit file extensions can avoid this issue by enabling the import map to utilize a packages folder mapping to map multiple subpaths where possible instead of a separate map entry per package subpath export. This also mirrors the requirement of using the full specifier path in relative and absolute import specifiers.
+
+## Exports sugar
+
+If the "`.`" export is the only export, the ["`exports`"](#exports) field provides sugar for this case being the direct ["`exports`"](#exports) field value.
+
+```json
+    {
+    "exports": {
+        ".": "./index.js"
+    }
+    } 
+```
+
+can be written:
+
+```json
+    {
+    "exports": "./index.js"
+    }
+```
+
+## Conditional exports {#conditional-exports}
+
+Conditional exports provide a way to map to different paths depending on certain conditions. They are supported for both CommonJS and ES module imports.
+
+For example, a package that wants to provide different ES module exports for `require()` and `import` can be written:
+
+```json
+    // package.json
+    {
+    "exports": {
+        "import": "./index-module.js",
+        "require": "./index-require.cjs"
+    },
+    "type": "module"
+    } 
+```
