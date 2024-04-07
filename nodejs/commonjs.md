@@ -144,6 +144,138 @@ Furthermore, to make the module lookup process even more optimal, rather than pu
 
 In order to make modules available to the Node.js REPL, it might be useful to also add the /usr/lib/node_modules folder to the $NODE_PATH environment variable. Since the module lookups using node_modules folders are all relative, and based on the real path of the files making the calls to require(), the packages themselves can be anywhere.
 
+## The `.mjs` extension
+
+Due to the synchronous nature of require(), it is not possible to use it to load ECMAScript module files. Attempting to do so will throw a ERR_REQUIRE_ESM error. Use import() instead.
+
+The .mjs extension is reserved for ECMAScript Modules which cannot be loaded via require(). See Determining module system section for more info regarding which files are parsed as ECMAScript modules.
+
+## All together
+
+To get the exact filename that will be loaded when `require()` is called, use the `require.resolve()` function.
+
+为了获取一个确切的文件名字在`require()`调用时被加载，使用`require.resolve()`方法。
+
+Putting together all of the above, here is the high-level algorithm in pseudocode of what `require()` does:
+
+把上面所有内容放到一起，这儿是`require()`的伪算法：
+
+```pseudo language
+    require(X) from module at path Y
+    # 从path Y上的模块中require(X)
+    1. If X is a core module,
+    # 如果X时核心模块
+        a. return the core module
+        # 则返回核心模块
+        b. STOP
+        # 然后停止
+    2. If X begins with '/'
+    # 如果X是以'/'开头
+        a. set Y to be the file system root
+        # 设置Y为文件系统根目录
+    3. If X begins with './' or '/' or '../'
+    # 如果X以'./' or '/' or '../'开头
+        a. LOAD_AS_FILE(Y + X)
+        b. LOAD_AS_DIRECTORY(Y + X)
+        c. THROW "not found"
+        # 抛出没有找到的异常
+    4. If X begins with '#'
+    # 如果X以'#'开头
+        a. LOAD_PACKAGE_IMPORTS(X, dirname(Y))
+    5. LOAD_PACKAGE_SELF(X, dirname(Y))
+    6. LOAD_NODE_MODULES(X, dirname(Y))
+    7. THROW "not found"
+    # 抛出没有找到的异常
+
+    LOAD_AS_FILE(X)
+    1. If X is a file, load X as its file extension format. STOP
+    # 如果X是一个文件，以扩展名的格式加载X。停止。
+    2. If X.js is a file, load X.js as JavaScript text. STOP
+    # 如果X.js是一个文件，加载X.js作为Javascript文本。停止。
+    3. If X.json is a file, parse X.json to a JavaScript Object. STOP
+    # 如果X.json是一个文件，分析X.json作为一个Javascript Object。停止。
+    4. If X.node is a file, load X.node as binary addon. STOP
+    # 如果X.node是一个文件，加载X.node作为一个二进制插件。停止
+
+    LOAD_INDEX(X)
+    1. If X/index.js is a file, load X/index.js as JavaScript text. STOP
+    # 如果X/index.js是一个文件，加载 X/index.js作为JavaScript text。停止。
+    2. If X/index.json is a file, parse X/index.json to a JavaScript object. STOP
+    # 如果X/index.json是一个文件，加载 X/index.json作为一个JavaScript对象。停止。
+    3. If X/index.node is a file, load X/index.node as binary addon. STOP
+    # 如果 X/index.node是一个文件，加载 X/index.node作为二进制插件。停止。
+
+    LOAD_AS_DIRECTORY(X)
+    1. If X/package.json is a file,
+    # 如果X/package.json是一个文件
+    a. Parse X/package.json, and look for "main" field.
+    # 分析X/package.json，寻找“main”域
+    b. If "main" is a falsy value, GOTO 2.
+    # 如果“main”是一个falsy，去2
+    c. let M = X + (json main field)
+    # 让M=X+(json main field)
+    d. LOAD_AS_FILE(M)
+    e. LOAD_INDEX(M)
+    f. LOAD_INDEX(X) DEPRECATED
+    # 被废弃
+    g. THROW "not found"
+    # 抛出找不到的异常
+    2. LOAD_INDEX(X)
+
+    LOAD_NODE_MODULES(X, START)
+    1. let DIRS = NODE_MODULES_PATHS(START)
+    2. for each DIR in DIRS:
+    a. LOAD_PACKAGE_EXPORTS(X, DIR)
+    b. LOAD_AS_FILE(DIR/X)
+    c. LOAD_AS_DIRECTORY(DIR/X)
+
+    NODE_MODULES_PATHS(START)
+    1. let PARTS = path split(START)
+    2. let I = count of PARTS - 1
+    3. let DIRS = []
+    4. while I >= 0,
+    a. if PARTS[I] = "node_modules" CONTINUE
+    b. DIR = path join(PARTS[0 .. I] + "node_modules")
+    c. DIRS = DIR + DIRS
+    d. let I = I - 1
+    5. return DIRS + GLOBAL_FOLDERS
+
+    LOAD_PACKAGE_IMPORTS(X, DIR)
+    1. Find the closest package scope SCOPE to DIR.
+    2. If no scope was found, return.
+    3. If the SCOPE/package.json "imports" is null or undefined, return.
+    4. let MATCH = PACKAGE_IMPORTS_RESOLVE(X, pathToFileURL(SCOPE),
+    ["node", "require"]) defined in the ESM resolver.
+    5. RESOLVE_ESM_MATCH(MATCH).
+
+    LOAD_PACKAGE_EXPORTS(X, DIR)
+    1. Try to interpret X as a combination of NAME and SUBPATH where the name
+    may have a @scope/ prefix and the subpath begins with a slash (`/`).
+    2. If X does not match this pattern or DIR/NAME/package.json is not a file,
+    return.
+    3. Parse DIR/NAME/package.json, and look for "exports" field.
+    4. If "exports" is null or undefined, return.
+    5. let MATCH = PACKAGE_EXPORTS_RESOLVE(pathToFileURL(DIR/NAME), "." + SUBPATH,
+    `package.json` "exports", ["node", "require"]) defined in the ESM resolver.
+    6. RESOLVE_ESM_MATCH(MATCH)
+
+    LOAD_PACKAGE_SELF(X, DIR)
+    1. Find the closest package scope SCOPE to DIR.
+    2. If no scope was found, return.
+    3. If the SCOPE/package.json "exports" is null or undefined, return.
+    4. If the SCOPE/package.json "name" is not the first segment of X, return.
+    5. let MATCH = PACKAGE_EXPORTS_RESOLVE(pathToFileURL(SCOPE),
+    "." + X.slice("name".length), `package.json` "exports", ["node", "require"])
+    defined in the ESM resolver.
+    6. RESOLVE_ESM_MATCH(MATCH)
+
+    RESOLVE_ESM_MATCH(MATCH)
+    1. let RESOLVED_PATH = fileURLToPath(MATCH)
+    2. If the file at RESOLVED_PATH exists, load RESOLVED_PATH as its extension
+    format. STOP
+    3. THROW "not found"
+```
+
 ## Core modules {#core-modules}
 
 Node.js has several modules compiled into the binary. These modules are described in greater detail elsewhere in this documentation.
