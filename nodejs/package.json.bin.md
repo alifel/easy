@@ -2,7 +2,7 @@
 
 A lot of packages have one or more executable files that they'd like to install into the `PATH`. npm makes this pretty easy (in fact, it uses this feature to install the "npm" executable.)
 
-许多包油1个或者多个可执行文件，他们想安装这些可执行文件到`PATH`中。npm让这个非常容易（实际上，用这个功能来安装npm的可执行文件）
+许多包有1个或者多个可执行文件，他们想安装这些可执行文件到`PATH`中。npm让这个非常容易（实际上，用这个功能来安装npm的可执行文件）
 
 To use this, supply a `bin` field in your `package.json` which is a map of command name to local file name. When this package is installed globally, that file will be either linked inside the global bins directory or a cmd (Windows Command File) will be created which executes the specified file in the `bin` field, so it is available to run by `name` or `name.cmd` (on Windows PowerShell). When this package is installed as a dependency in another package, the file will be linked where it will be available to that package either directly by `npm exec` or by name in other scripts when invoking them via `npm run-script`.
 

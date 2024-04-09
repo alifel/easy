@@ -35,9 +35,37 @@ Package names provided without a specifier will be matched with whatever version
 
 If no `-c` or `--call` option is provided, then the positional arguments are used to generate the command string. If no `--package` options are provided, then npm will attempt to determine the executable name from the package specifier provided as the first positional argument according to the following heuristic:
 
-如果没有`-c` 或 `--call`被提供，则位置参数被用来生成命令的字符串。如果没有 `--package`被提供，
+如果没有`-c` 或 `--call`被提供，则位置参数被用来生成命令的字符串。如果没有 `--package`被提供，npm将会尝试通过第一个位置参数提供的包说明符确定可执行的文件名字，具体按下面的启发方法：
 
-- If the package has a single entry in its bin field in package.json, or if all entries are aliases of the same command, then that command will be used.
-- If the package has multiple bin entries, and one of them matches the unscoped portion of the name field, then that command will be used.
-- If this does not result in exactly one option (either because there are no bin entries, or none of them match the name of the package), then npm exec exits with an error.
-To run a binary other than the named binary, specify one or more --package options, which will prevent npm from inferring the package from the first command argument.
+- If the package has a single entry in its `bin` field in `package.json`, or if all entries are aliases of the same command, then that command will be used.
+如果包在其`package.json`中的`bin`域中有单一的入口，或者所有入口都是相同命令的别名，则该命令被执行
+- If the package has multiple `bin` entries, and one of them matches the unscoped portion of the `name` field, then that command will be used.
+如果包有多个`bin`入口，它们中的一个匹配了`name`域的非scoped部分，这个命令会被执行。
+- If this does not result in exactly one option (either because there are no bin entries, or none of them match the `name` of the package), then npm exec exits with an error.
+如果没有得出一个具体的选项（要么因为没有`bin`入口，要么他们中没有任何一项匹配包的`name`），npm则带着一个error退出。
+
+To run a binary other than the named binary, specify one or more `--package` options, which will prevent npm from inferring the package from the first command argument.
+
+To run a binary other than the named binary ***(:pill::pill::pill:不知道如何理解)***，指定1个或者多个 `--package` 选项，将会组织npm从第一个命令参数中推理包
+
+## Configuration
+
+`package`
+
+- Default:
+- Type: String (can be set multiple times)
+
+The package or packages to install for `npm exec`
+
+`call`
+
+- Default: ""
+- Type: String
+
+Optional companion option for `npm exec`, `npx` that allows for specifying a custom command to be run along with the installed packages.
+
+```shell
+    npm exec --package yo --package generator-node --call "yo node"
+```
+
+## Examples
