@@ -87,7 +87,7 @@ By default, Node.js will treat the following as CommonJS modules:
 - Files with a `.js` extension when the nearest parent `package.json` file contains a top-level field "`type`" with a value of "`commonjs`".
   以`.js`为扩展的文件，当最近的父级`package.json`文件包含一个顶级域“`type`”的值为“`commonjs`”时；
 - Files with a `.js` extension or without an extension, when the nearest parent `package.json` file doesn't contain a top-level field "type" or there is no `package.json` in any parent folder; unless the file contains syntax that errors unless it is evaluated as an ES module. Package authors should include the "`type`" field, even in packages where all sources are CommonJS. Being explicit about the type of the package will make things easier for build tools and loaders to determine how the files in the package should be interpreted.
-  以`.js`为扩展名或者没有扩展名的文件，当最近的父级`package.json`中不包含顶级域“`type`”或没有`package.json`文件在任意父级文件夹时；unless the file contains syntax that errors unless it is evaluated as an ES module ***(:pill::pill::pill:这句不知道如何理解，2个unless让我很迷茫)***。包的作者应该包括“`type`”域，即使包中所有的资源都是CommonJS。精确的指出包的类型会让事情（对于构建工具和加载器决定如何解释包中的文件）更容易。
+  以`.js`为扩展名或者没有扩展名的文件，当最近的父级 ***(:pill::pill::pill:最近父级，同级也包括在内，即如果同级存在，则视为最近父级。这里针对这个问题，作者亲自做了测试)*** `package.json`中不包含顶级域“`type`”或没有`package.json`文件在任意父级文件夹时；unless the file contains syntax that errors unless it is evaluated as an ES module ***(:pill::pill::pill:这句不知道如何理解，2个unless让我很迷茫)***。包的作者应该包括“`type`”域，即使包中所有的资源都是CommonJS。精确的指出包的类型会让事情（对于构建工具和加载器决定如何解释包中的文件）更容易。
 - Files with an extension that is not `.mjs`, `.cjs`, `.json`, `.node`, or `.js` (when the nearest parent `package.json` file contains a top-level field "type" with a value of "module", those files will be recognized as CommonJS modules only if they are being included via `require()`, not when used as the command-line entry point of the program).
   文件的扩展名不是`.mjs`、`.cjs`、`.json`、`.node`或者`.js`（当最近的父级`package.json`文件包含顶级域“`type`”，并且它有一个值“`module`”时，仅当它们被通过`require()`包含，而不是用作命令行的入口程序时，这个文件被识别为CommonJS模块）
 
@@ -270,7 +270,13 @@ Putting together all of the above, here is the high-level algorithm in pseudocod
     # 如果SCOPE/package.json的"name" field不是X的第一段，则返回
     5. let MATCH = PACKAGE_EXPORTS_RESOLVE(pathToFileURL(SCOPE),
     "." + X.slice("name".length), `package.json` "exports", ["node", "require"])
-    defined in the ESM resolver.
+    # 把找到的SCOPE的包的路径转换为一个URL，作为PACKAGE_EXPORTS_RESOLVE的packageURL形参
+    # 从X中把package.json中name对应的部分截取掉作为PACKAGE_EXPORTS_RESOLVE的subpath形参
+    # 用package.json的exports作为exports作为PACKAGE_EXPORTS_RESOLVE的的exports形参
+    # 用["node", "require"]作为PACKAGE_EXPORTS_RESOLVE的的conditions形参
+    # 调用PACKAGE_EXPORTS_RESOLVE
+    [defined in the ESM resolver](./ESM.md#PACKAGE_EXPORTS_RESOLVE).
+    [PACKAGE_EXPORTS_RESOLVE定义在ESM的解析器中](./ESM.md#PACKAGE_EXPORTS_RESOLVE).
     6. RESOLVE_ESM_MATCH(MATCH)
 
     RESOLVE_ESM_MATCH(MATCH)
