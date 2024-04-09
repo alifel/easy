@@ -261,9 +261,13 @@ Putting together all of the above, here is the high-level algorithm in pseudocod
 
     LOAD_PACKAGE_SELF(X, DIR)
     1. Find the closest package scope SCOPE to DIR.
+    # 找到最接近DIR的包范围SCOPE
     2. If no scope was found, return.
+    # 如果没有找到，则返回
     3. If the SCOPE/package.json "exports" is null or undefined, return.
+    # 如果 SCOPE/package.json 的"export"为null或者undefined，则返回
     4. If the SCOPE/package.json "name" is not the first segment of X, return.
+    # 如果SCOPE/package.json的"name" field不是X的第一段，则返回
     5. let MATCH = PACKAGE_EXPORTS_RESOLVE(pathToFileURL(SCOPE),
     "." + X.slice("name".length), `package.json` "exports", ["node", "require"])
     defined in the ESM resolver.
