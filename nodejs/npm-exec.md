@@ -215,17 +215,25 @@ This resulted in some shifts in its functionality:
 
 The npm cli utilizes its internal package cache when using the package name specified. You can use the following to change how and when the cli uses this cache. See npm cache for more on how the cache works.
 
+npm cli 在使用指定的包名称时，会使用其内部的包缓存。你可以使用以下内容来改变cli如何使用这个缓存。有关缓存的工作方式，请参阅npm cache。
+
 ### prefer-online
 
 Forces staleness checks for packages, making the cli look for updates immediately even if the package is already in the cache.
 
+强制对包进行不新鲜检查，即使包已经在缓存中，也要立刻寻找更新。
+
 ### prefer-offline
 
-Bypasses staleness checks for packages. Missing data will still be requested from the server. To force full offline mode, use offline.
+Bypasses staleness checks for packages. Missing data will still be requested from the server. To force full offline mode, use `offline`.
+
+忽略不新鲜检查。丢失数据荏苒从服务器请求。强制所有离线模式，使用`offline`。
 
 ### offline
 
 Forces full offline mode. Any packages not locally cached will result in an error.
+
+强制全离线模式。任何包没有在本地被缓存则报错。
 
 ### workspace
 
@@ -234,3 +242,5 @@ Forces full offline mode. Any packages not locally cached will result in an erro
 ### workspaces
 
 因为目前开发没有涉及workspace，所以该部分内容没有学习
+
+***以上是官方文档的所有内容***
