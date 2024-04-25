@@ -193,12 +193,12 @@ This resulted in some shifts in its functionality:
 
 - Any `npm config` value may be provided.
 - 任意 `npm config`的值都可用。
-- To prevent security and user-experience problems from mistyping package names, npx prompts before installing anything. Suppress this prompt with the -y or --yes option.
-- 为了防止安全性和用户体验问题，当用户输入错误时，npx在安装任意东西前会进行提示。使用-y或--yes选项可以抑制这个提示。
+- To prevent security and user-experience problems from mistyping package names, npx prompts before installing anything. Suppress this prompt with the `-y` or `--yes` option.
+- 为了防止安全性和用户体验问题，当用户输入错误时，npx在安装任意东西前会进行提示。使用`-y`或`--yes`选项可以抑制这个提示。
 - The `--no-install` option is deprecated, and will be converted to `--no`.
 - `--no-install`被废弃，使用 `--no`
 - Shell fallback functionality is removed, as it is not advisable.
-- The `-p` argument is a shorthand for --parseable in `npm`, but shorthand for `--package` in `npx`. This is maintained, but only for the npx executable.
+- The `-p` argument is a shorthand for --parseable in `npm`, but shorthand for `--package` in `npx`. This is maintained, but only for the `npx` executable.
 - `-p`参数是`npm`的`--parseable`的简写，但是在`npx`中是`--package`的简写。这个功能被保留，但是只适用于`npx`二进制文件。
 - The `--ignore-existing` option is removed. Locally installed bins are always present in the executed process `PATH`.
 - `--ignore-existing`选项被移除。本地安装的 bins 总是在执行进程 `PATH` 中始终存在。
