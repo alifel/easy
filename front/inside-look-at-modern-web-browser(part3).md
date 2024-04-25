@@ -156,6 +156,8 @@ In order to find out which elements need to be in which layers, the main thread 
 
 ![p16](./inside-look-at-modern-web-browser(part3)-images/layer-tree-cc92336966c73_1920.png)
 
+Figure 16: The main thread walking through layout tree producing layer tree
+
 You might be tempted to give layers to every element, but compositing across an excess number of layers could result in slower operation than rasterizing small parts of a page every frame, so it is crucial that you measure rendering performance of your application. For more about on topic, see [Stick to Compositor-Only Properties and Manage Layer Count](https://developers.google.com/web/fundamentals/performance/rendering/stick-to-compositor-only-properties-and-manage-layer-count).
 
 ### Raster and composite off of the main thread
