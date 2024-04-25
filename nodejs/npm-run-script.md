@@ -62,3 +62,7 @@ scripts（当通过`npm run`被调用时）从package的根目录开始运行，
 If you try to run a script without having a `node_modules` directory and it fails, you will be given a warning to run `npm install`, just in case you've forgotten.
 
 如果你试图执行的脚本没有`node_modules`目录，它将失败，你会收到一个警告，让你运行`npm install`，以防你忘记了。***(:pill::pill::pill: 我测试，不会提示，不知道为什么。我对这句的理解是，如果`node_nodules`目录没有，这个包的`package.json`中的`script`都不能执行)***
+
+## Workspaces support
+
+这部分忽略，目前开发项目都没有涉及workspaces
