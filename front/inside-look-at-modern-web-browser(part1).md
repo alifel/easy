@@ -1,4 +1,4 @@
-# Inside look at modern web browser (part 1) 
+# Inside look at modern web browser (part 1)
 
 ## CPU, GPU, Memory, and multi-process architecture
 
