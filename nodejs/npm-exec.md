@@ -46,7 +46,44 @@ If no `-c` or `--call` option is provided, then the positional arguments are use
 
 To run a binary other than the named binary, specify one or more `--package` options, which will prevent npm from inferring the package from the first command argument.
 
-To run a binary other than the named binary ***(:pill::pill::pill:不知道如何理解)***，指定1个或者多个 `--package` 选项，将会组织npm从第一个命令参数中推理包
+执行一个二进制文件而不是被命名的二进制文件，指定一个或多个`--package`选项，这会阻止npm从第一个命令参数中推断出包。
+
+## `npx` vs `npm exec`
+
+When run via the `npx` binary, all flags and options must be set prior to any positional arguments. When run via `npm exec`, a double-hyphen `--` flag can be used to suppress npm's parsing of switches and options that should be sent to the executed command.
+
+当通过`npx`二进制文件运行时，所有选项和参数必须在位置参数之前设置。当通过`npm exec`运行时，双短划线`--`标志可以用来抑制npm的解析选项和参数，这些选项和参数应该被发送到被执行的命令。
+
+For example:
+
+`$ npx foo@latest bar --package=@npmcli/foo`
+In this case, npm will resolve the foo package name, and run the following command:
+
+在此例中，npm将解析foo包名称，并运行以下命令：
+
+`$ foo bar --package=@npmcli/foo`
+
+Since the `--package` option comes after the positional arguments, it is treated as an argument to the executed command.
+
+因为`--package`选项在位置参数之后，所以它被当作被执行的命令的参数。
+
+In contrast, due to npm's argument parsing logic, running this command is different:
+
+相反，由于npm的参数解析逻辑，运行这个命令是不同的：
+
+`$ npm exec foo@latest bar --package=@npmcli/foo`
+
+In this case, npm will parse the `--package` option first, resolving the `@npmcli/foo` package. Then, it will execute the following command in that context:
+
+在此例中，npm会先解析`--package`选项，解析出`@npmcli/foo`包。然后，它会在这个上下文中执行以下命令：
+
+`$ foo@latest bar`
+
+The double-hyphen character is recommended to explicitly tell npm to stop parsing command line options and switches. The following command would thus be equivalent to the npx command above:
+
+双横线字符是被推荐的用来明确告诉npm停止解析命令行选项和开关。因此，以下命令与上面的`npx`命令是等价的：
+
+`$ npm exec -- foo@latest bar --package=@npmcli/foo`
 
 ## Configuration
 
@@ -68,4 +105,132 @@ Optional companion option for `npm exec`, `npx` that allows for specifying a cus
     npm exec --package yo --package generator-node --call "yo node"
 ```
 
+`workspace`
+
+- Default:
+- Type: String (can be set multiple times)
+
+Enable running a command in the context of the configured workspaces of the current project while filtering by running only the workspaces defined by this configuration option.
+
+Valid values for the `workspace` config are either:
+
+- Workspace names
+- Path to a workspace directory
+- Path to a parent workspace directory (will result in selecting all workspaces within that folder)
+
+When set for the npm init command, this may be set to the folder of a workspace which does not yet exist, to create the folder and set it up as a brand new workspace within the project.
+
+This value is not exported to the environment for child processes.
+
+`workspaces`
+
+- Default: null
+- Type: null or Boolean
+
+Set to true to run the command in the context of all configured workspaces.
+
+Explicitly setting this to false will cause commands like install to ignore workspaces altogether. When not set explicitly:
+
+- Commands that operate on the node_modules tree (install, update, etc.) will link workspaces into the node_modules folder. - Commands that do other things (test, exec, publish, etc.) will operate on the root project, unless one or more workspaces are specified in the workspace config.
+This value is not exported to the environment for child processes.
+
+`include-workspace-root`
+
+- Default: false
+- Type: Boolean
+
+Include the workspace root when workspaces are enabled for a command.
+
+When false, specifying individual workspaces via the workspace config, or all workspaces via the workspaces flag, will cause npm to operate only on the specified workspaces, and not on the root project.
+
+This value is not exported to the environment for child processes.
+
 ## Examples
+
+Run the version of `tap` in the local dependencies, with the provided arguments:
+
+运行本地依赖中的`tap`的版本，并使用提供的参数：
+
+```shell
+$ npm exec -- tap --bail test/foo.js
+# ~ or ~
+$ npx tap --bail test/foo.js
+```
+
+Run a command other than the command whose name matches the package name by specifying a `--package` option:
+
+运行一个命令，而不是命令名称与包（通过指定一个`--package`选项）名称匹配的命令：
+
+```shell
+$ npm exec --package=foo -- bar --bar-argument
+# ~ or ~
+$ npx --package=foo bar --bar-argument
+```
+
+Run an arbitrary shell script, in the context of the current project:
+
+运行任意的shell脚本，在当前项目中的上下文中：
+
+```shell
+$ npm x -c 'eslint && say "hooray, lint passed"'
+# ~ or ~
+$ npx -c 'eslint && say "hooray, lint passed"'
+```
+
+## Workspaces support
+
+这一部分涉及`workspaces`，当前没有用到，所以忽略了
+
+## Compatibility with Older npx Versions
+
+The `npx` binary was rewritten in npm v7.0.0, and the standalone `npx` package deprecated at that time. `npx` uses the `npm exec` command instead of a separate argument parser and install process, with some affordances to maintain backwards compatibility with the arguments it accepted in previous versions.
+
+`npx`二进制文件在npm v7.0.0时重写了，之前独立的`npx`二进制文件被弃用。`npx`使用`npm exec`命令代替单独的参数解析器和安装进程，同时提供了一些 affordances 来保持与以前的版本中`npx`所接受的参数的向后兼容性。
+
+This resulted in some shifts in its functionality:
+
+这导致了一些功能的变化：
+
+- Any `npm config` value may be provided.
+- 任意 `npm config`的值都可用。
+- To prevent security and user-experience problems from mistyping package names, npx prompts before installing anything. Suppress this prompt with the -y or --yes option.
+- 为了防止安全性和用户体验问题，当用户输入错误时，npx在安装任意东西前会进行提示。使用-y或--yes选项可以抑制这个提示。
+- The `--no-install` option is deprecated, and will be converted to `--no`.
+- `--no-install`被废弃，使用 `--no`
+- Shell fallback functionality is removed, as it is not advisable.
+- The `-p` argument is a shorthand for --parseable in `npm`, but shorthand for `--package` in `npx`. This is maintained, but only for the npx executable.
+- `-p`参数是`npm`的`--parseable`的简写，但是在`npx`中是`--package`的简写。这个功能被保留，但是只适用于`npx`二进制文件。
+- The `--ignore-existing` option is removed. Locally installed bins are always present in the executed process `PATH`.
+- `--ignore-existing`选项被移除。本地安装的 bins 总是在执行进程 `PATH` 中始终存在。
+- The `--npm` option is removed. `npx` will always use the `npm` it ships with.
+- `--npm`被移除。`npx` 总是使用它附带的 `npm`。
+- The `--node-arg` and `-n` options have been removed.
+- `--node-arg` 和 `-n`选项被移除。
+- The `--always-spawn` option is redundant, and thus removed.
+- `--always-spawn`选项是多余的，因此被移除。`
+- The `--shell` option is replaced with `--script-shell`, but maintained in the `npx` executable for backwards compatibility.
+- `--shell`选项被替换为`--script-shell`，但是保留在`npx`二进制文件中以保持向后兼容性。
+
+## A note on caching
+
+The npm cli utilizes its internal package cache when using the package name specified. You can use the following to change how and when the cli uses this cache. See npm cache for more on how the cache works.
+
+### prefer-online
+
+Forces staleness checks for packages, making the cli look for updates immediately even if the package is already in the cache.
+
+### prefer-offline
+
+Bypasses staleness checks for packages. Missing data will still be requested from the server. To force full offline mode, use offline.
+
+### offline
+
+Forces full offline mode. Any packages not locally cached will result in an error.
+
+### workspace
+
+因为目前开发没有涉及workspace，所以该部分内容没有学习
+
+### workspaces
+
+因为目前开发没有涉及workspace，所以该部分内容没有学习
