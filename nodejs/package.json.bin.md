@@ -65,3 +65,5 @@ See [folders for more info on executables](https://docs.npmjs.com/cli/v10/config
 > 在全局模式时，在unix中，可执行文件被链接到`{prefix}/bin`，在Windows中直接链接到`{prefix}`。确保路径在你终端的`PATH`环境变量中执行它们。
 > When in local mode, executables are linked into `./node_modules/.bin` so that they can be made available to scripts run through npm. (For example, so that a test runner will be in the path when you run `npm test`.)
 > 在本地模式时，可执行文件被链接到`./node_modules/.bin`，因此它时可以通过npm的scripts去执行的。
+
+***以上是官方文档的所有内容***
