@@ -66,3 +66,5 @@ If you try to run a script without having a `node_modules` directory and it fail
 ## Workspaces support
 
 这部分忽略，目前开发项目都没有涉及workspaces
+
+***除了相关配置部分，以上是官方文档的所有内容***
