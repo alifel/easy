@@ -1,0 +1,27 @@
+# immutable-js.md
+
+## 什么是`immutable.js`
+
+`immutable.js`是一个库，里面写了`List`（`pop`，`push`都在`index=length-1`上操作。）,`Map`,`OrderedMap`（遍历顺序与set的顺序相同）,`Record`（预设一组`key`，`Record()`返回的是一个构造`Record`的工厂方法）,`Set`,`OrderedSet`（遍历顺序与set的顺序相同）,`Stack`（`pop`，`push`，`peek`都在`index=0`上操作。）,`Collection`等数据结构，这些数据结构都是不可变的。也就是一单通过它的工厂方法创建后，再对其内容进行操作，如进行set，remove等，那么相关方法会返回一个新的不可变对象（immutable封装的），而原来的对象（immutable）不会变。当时他们之间会共享相同的节点（这会提高性能）。
+
+### 如何理解共享相同节点？
+
+```javascript
+import { List} from 'immutable'
+let d = ['a1', 'a2']
+let d2 = ['a1', 'a2']
+let l = List([1,2,3,d])
+let l2 = l.set(0,10)
+let l3 = l2.set(0,1)
+let l4 = List([1,2,3,d])
+let l5 = List([1,2,3,d2])
+console.log(l3 === l) //false
+console.log(l3.equals(l)) //true
+console.log(l.get(3) === l3.get(3)) //true
+console.log(l.equals(l4)) //true
+console.log(l.equals(l5)) //false
+```
+
+***文档地址：<https://immutable-js.com/docs/v4.3.5/>***
+
+===自己的总结===
