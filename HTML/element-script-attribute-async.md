@@ -1,4 +1,4 @@
-# script attribute async
+# `<script>` attribute `async`
 
 For classic scripts, if the `async` attribute is present, then the classic script will be fetched in parallel to parsing and evaluated as soon as it is available.
 

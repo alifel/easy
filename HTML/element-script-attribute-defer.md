@@ -1,4 +1,4 @@
-# script attribute defer
+# `<script>` attribute `defer`
 
 This Boolean attribute is set to indicate to a browser that the script is meant to be executed after the document has been parsed, but before firing [DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event).
 
