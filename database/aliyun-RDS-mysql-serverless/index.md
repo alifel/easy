@@ -51,3 +51,7 @@ RDS MySQL Serverless计算资源的单位是RCU（RDS Capacity Unit），1个RCU
     - 您可以采用其中一种方式：
         - 进行压测，得到最低负载和最高负载时所需的RCU数或CPU核数。
         - 按业务需要的CPU核数评估。1个RCU约等于1核2 GB内存。
+
+**原文档：<https://help.aliyun.com/zh/rds/apsaradb-rds-for-mysql/rds-mysql-serverless?spm=a2c4g.11186623.0.0.6e7c7a88vQWrXh>**
+
+==以上内容是上面文档的部分内容截选==

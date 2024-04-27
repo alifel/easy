@@ -146,3 +146,5 @@ Example to exclude everything except a specific directory `foo/bar` (note the `/
 
 文档地址：<https://git-scm.com/docs/gitignore>
 整理时间：2024年3月30日
+
+==以上是文档的部分内容截取和翻译==
