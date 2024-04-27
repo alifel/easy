@@ -11,3 +11,5 @@ A driver communicates with the device through the computer bus or communications
 Drivers are hardware dependent and operating-system-specific. They usually provide the interrupt handling required for any necessary asynchronous time-dependent hardware interface.[2]
 
 驱动与硬件和操作系统密不可分。它们通常提供所需的中断处理（为了任何异步时间相关的硬件接口）。
+
+==互联网内容节选、翻译==
