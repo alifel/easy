@@ -80,12 +80,14 @@ Many content types can be preloaded. The possible `as` attribute values are:
 - `style`: CSS stylesheet.
 - `track`: WebVTT file.
 
-> :warning: Note: font and fetch preloading requires the crossorigin attribute to be set; see [CORS-enabled fetches](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/preload#cors-enabled_fetches) below.
->
-> 注意：字体和fetch预加载需要设置crossorigin属性；请参阅下面的[CORS-enabled fetches](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/preload#cors-enabled_fetches)。
+==:warning: Note: font and fetch preloading requires the crossorigin attribute to be set; see [CORS-enabled fetches](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/preload#cors-enabled_fetches) below.==
 
+==注意：字体和fetch预加载需要设置crossorigin属性；请参阅下面的[CORS-enabled fetches](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/preload#cors-enabled_fetches)。==
 
->:warning: Note: There's more detail about these values and the web features they expect to be consumed by in the HTML spec — see Link type "preload". Also note that the full list of values the as attribute can take is governed by the Fetch spec — see request destinations.
+==:warning: Note: There's more detail about these values and the web features they expect to be consumed by in the HTML spec — see Link type "preload". Also note that the full list of values the as attribute can take is governed by the Fetch spec — see request destinations.==
+
+== 注意：==
+
 ---
 
 <https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/preload>
