@@ -128,4 +128,6 @@ If multiple single-character shorthands are strung together, and the resulting c
 
 这部分忽略，这里面是所有的配置项，具体实时查阅文档
 
-***不算Config Settings部分，其余是文档的全部（using npm -> config）***
+---
+
+==不算Config Settings部分，其余是文档的全部（using npm -> config）==

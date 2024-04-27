@@ -66,4 +66,6 @@ See [folders for more info on executables](https://docs.npmjs.com/cli/v10/config
 > When in local mode, executables are linked into `./node_modules/.bin` so that they can be made available to scripts run through npm. (For example, so that a test runner will be in the path when you run `npm test`.)
 > 在本地模式时，可执行文件被链接到`./node_modules/.bin`，因此它时可以通过npm的scripts去执行的。
 
-***以上是官方文档的所有内容***
+---
+
+==以上是官方文档的所有内容==

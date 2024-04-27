@@ -144,4 +144,6 @@ This resulted in some shifts in its functionality:
 - The `--shell` option is replaced with `--script-shell`, but maintained in the `npx` executable for backwards compatibility.
 - `--shell`选项被替换为`--script-shell`，但是保留在`npx`二进制文件中以保持向后兼容性。
 
-***以上是官方文档的所有内容***
+---
+
+==以上是官方文档的所有内容==
