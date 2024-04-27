@@ -52,6 +52,37 @@ RDS MySQL Serverless计算资源的单位是RCU（RDS Capacity Unit），1个RCU
         - 进行压测，得到最低负载和最高负载时所需的RCU数或CPU核数。
         - 按业务需要的CPU核数评估。1个RCU约等于1核2 GB内存。
 
-**原文档：<https://help.aliyun.com/zh/rds/apsaradb-rds-for-mysql/rds-mysql-serverless?spm=a2c4g.11186623.0.0.6e7c7a88vQWrXh>**
+**内容涉及文档：<https://help.aliyun.com/zh/rds/apsaradb-rds-for-mysql/rds-mysql-serverless?spm=a2c4g.11186623.0.0.6e7c7a88vQWrXh>**
+
+## 价格
+
+详见<https://help.aliyun.com/zh/rds/apsaradb-rds-for-mysql/pricing-of-serverless-rds-instances?spm=a2c4g.11186623.0.0.7cd64412vKbJIJ>
+
+> 购买实例时选择的存储空间为单节点最小空间使用量。例如，创建Serverless基础系列实例时选择了100 GB存储空间，则在实际使用时，存储空间使用量不足100 GB仍按100 GB计费，如果使用量超过100 GB，则Serverless基础系列实例会自动扩容，按实际使用量计费。
+>
+> Serverless实例节点存储空间自动扩容后，为确保数据完整，不支持自动缩容，仍按扩容后的存储空间计费，请关注相关账单。如需手动缩容，请参见手动扩容和缩容存储空间。
+
+例如：用户购买了一个计算规格为最小0.5 RCU、最大8 RCU，存储空间为20 GB的Serverless基础系列（单节点）实例，一天内经历了一个小时的业务高峰，使用了8 RCU，其余时间均使用1 RCU，存储空间使用量为20 GB，如果RCU的单价为0.333元/小时/RCU，存储的价格为0.0017元/小时/GB，则一天的费用如下：
+
+RCU费用：(0.333x1x8)+(0.333x23x1)=10.232元
+
+存储费用：0.0017x24x20=0.816元
+
+总费用为10.232元+0.816元=11.048元。
+
+上述场景中，Serverless基础系列实例完成了8核16 GB的常规实例才能完成的任务，对比基础系列云盘8核16 GB规格1.523元/小时的售价，节省成本高达70%以上。
+
+### 不同实例状态下的收费情况
+
+|实例状态|计算费用|存储费用|
+|---|---|---|
+|暂停中|收费|收费|
+|已暂停|不收费|收费|
+|启动中|不收费|收费|
+|运行中|收费|收费|
+
+**以上内容涉及文档<<https://help.aliyun.com/zh/rds/apsaradb-rds-for-mysql/pricing-of-serverless-rds-instances?spm=a2c4g.11186623.0.0.7cd64412vKbJIJ>>**
+
+---
 
 ==以上内容是上面文档的部分内容截选==
