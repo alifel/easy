@@ -4,13 +4,21 @@
 
 This is part 3 of 4 part blog series looking at how browsers work. Previously, we covered [multi-process architecture](./inside-look-at-modern-web-browser(part1).md) and [navigation flow](./inside-look-at-modern-web-browser(part2).md). In this post, we are going to look at what happens inside of the renderer process.
 
+这是讲述浏览器如何工作的这一系列blog中的第3部分，一共4部分。之前我们已经讲了[multi-process architecture](./inside-look-at-modern-web-browser(part1).md) 和[navigation flow](./inside-look-at-modern-web-browser(part2).md)。在这篇文章中，我们讲继续看渲染进程中发生了什么。
+
 Renderer process touches many aspects of web performance. Since there is a lot happening inside of the renderer process, this post is only a general overview. If you'd like to dig deeper, [the Performance section of Web Fundamentals](https://developers.google.com/web/fundamentals/performance/why-performance-matters/) has many more resources.
+
+渲染进程接触了许多与web性能有关的方面。因为渲染进程里面有很多事情，本篇只做概览。如果你想深入了解，[Web Fundamentals Performance section](https://developers.google.com/web/fundamentals/performance/why-performance-matters/) 有很多资源。
 
 ## Renderer processes handle web contents
 
 The renderer process is responsible for everything that happens inside of a tab. In a renderer process, the main thread handles most of the code you send to the user. Sometimes parts of your JavaScript is handled by worker threads if you use a web worker or a service worker. Compositor and raster threads are also run inside of a renderer processes to render a page efficiently and smoothly.
 
+渲染进程响应tab中发生的每一件事情。在一个渲染进程中，主线程处理你发送给用户的大多数大妈。有时候你javscript的一部分是被worker线程处理的（如果你用了web worker或者service worker）。compositor和raster线程也运行的渲染进程，让渲染一个页面更搞笑和流畅。
+
 The renderer process's core job is to turn HTML, CSS, and JavaScript into a web page that the user can interact with.
+
+渲染进程的核心工作是将 HTML、CSS 和 JavaScript 转换为用户可以与之交互的网页。
 
 ![p1](./inside-look-at-modern-web-browser(part3)-images/renderer-process-df424472d0633_1920.png)
 
@@ -192,3 +200,9 @@ In this post, we looked at rendering pipeline from parsing to compositing. Hopef
 In the next and last post of this series, we'll look at the compositor thread in more details and see what happens when user input like mouse move and click comes in.
 
 Did you enjoy the post? If you have any questions or suggestions for the future post, I'd love to hear from you in the comment section below or [@kosamari](https://twitter.com/kosamari) on Twitter.
+
+---
+
+==以上是blog全文的翻译==
+
+<https://developer.chrome.com/blog/inside-browser-part3>
