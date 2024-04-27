@@ -144,7 +144,12 @@ Example to exclude everything except a specific directory `foo/bar` (note the `/
 
 ==（***:pill::pill::pill: 上方代码解析：`/*`首先排除了与`.gitignore`同级的所有文件和目录；然后`!/foo`又包含进来了与`.gitignore`同级的`foo`目录或文件；然后`/foo/*`又排除掉了`/foo`目录下的所有目录和文件；然后`!/foo/bar`又包含进来了`/foo`目录下的`bar`文件或者目录***）==
 
-文档地址：<https://git-scm.com/docs/gitignore>
-整理时间：2024年3月30日
+---
 
 ==以上是文档的部分内容截取和翻译==
+
+<https://git-scm.com/docs/gitignore>
+
+git version 2.44.0
+
+整理时间：2024年3月30日

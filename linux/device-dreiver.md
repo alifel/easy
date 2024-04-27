@@ -12,4 +12,6 @@ Drivers are hardware dependent and operating-system-specific. They usually provi
 
 驱动与硬件和操作系统密不可分。它们通常提供所需的中断处理（为了任何异步时间相关的硬件接口）。
 
+---
+
 ==互联网内容节选、翻译==

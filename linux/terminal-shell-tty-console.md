@@ -71,6 +71,8 @@ terminal和shell的工作区别不是特别明显。下面列出了它们主要�
 - [Job control](https://en.wikipedia.org/wiki/Job_control_(Unix)) (launching programs in the background and managing them) is mostly performed by the shell. However, it's the terminal that handles key combinations like Ctrl+C to kill the foreground job and Ctrl+Z to suspend it.
     [Job control](https://en.wikipedia.org/wiki/Job_control_(Unix))（在后台启动程序并管理它们），几乎所有都被shell执行。但是terminal它处理组合键Ctrl+C杀死前台工作的工作，使用Ctrl+Z中止它。
 
-原文：<https://unix.stackexchange.com/questions/4126/what-is-the-exact-difference-between-a-terminal-a-shell-a-tty-and-a-con>
+---
 
 ==原文翻译==
+
+<https://unix.stackexchange.com/questions/4126/what-is-the-exact-difference-between-a-terminal-a-shell-a-tty-and-a-con>

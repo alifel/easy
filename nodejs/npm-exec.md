@@ -246,3 +246,7 @@ Forces full offline mode. Any packages not locally cached will result in an erro
 ---
 
 ==以上是官方文档的所有内容==
+
+<https://docs.npmjs.com/cli/v10/commands/npm-exec>
+
+npm version 10.5.2

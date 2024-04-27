@@ -104,3 +104,7 @@ $ npm init -y
 ---
 
 ==以上是官方文档的所有内容==
+
+<https://docs.npmjs.com/cli/v10/commands/npm-init>
+
+npm version 10.5.2

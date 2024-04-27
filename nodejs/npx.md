@@ -147,3 +147,7 @@ This resulted in some shifts in its functionality:
 ---
 
 ==以上是官方文档的所有内容==
+
+<https://docs.npmjs.com/cli/v10/commands/npx>
+
+npm version 10.5.2

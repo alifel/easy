@@ -70,3 +70,7 @@ If you try to run a script without having a `node_modules` directory and it fail
 ---
 
 ==除了相关配置部分，以上是官方文档的所有内容==
+
+<https://docs.npmjs.com/cli/v10/commands/npm-run-script>
+
+npm version 10.5.2

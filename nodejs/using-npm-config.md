@@ -131,3 +131,7 @@ If multiple single-character shorthands are strung together, and the resulting c
 ---
 
 ==不算Config Settings部分，其余是文档的全部（using npm -> config）==
+
+<https://docs.npmjs.com/cli/v10/using-npm/config>
+
+npm version 10.5.2

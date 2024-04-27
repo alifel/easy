@@ -69,3 +69,7 @@ See [folders for more info on executables](https://docs.npmjs.com/cli/v10/config
 ---
 
 ==以上是官方文档的所有内容==
+
+<https://docs.npmjs.com/cli/v10/configuring-npm/package-json>
+
+npm version 10.5.2

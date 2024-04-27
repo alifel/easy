@@ -119,3 +119,11 @@ npm prevents accidentally overriding the Corepack binaries when doing a global i
 
 - Add the `--force` flag to `npm install`; this will tell npm that it's fine to override binaries, but you'll erase the Corepack ones in the process. (Run `corepack enable` to add them back.)
     增加`--force`标志，在使用`npm install`时，这会告诉npm可以覆盖二进制文件，但是这会擦掉corepack的二进制文件。（执行`corepack enable`重新添加回它们）
+
+---
+
+==以上是官方文档的所有内容==
+
+<https://nodejs.org/docs/latest/api/corepack.html>
+
+nodejs v22.0.0
