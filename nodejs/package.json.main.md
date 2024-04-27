@@ -21,3 +21,5 @@ If `main` is not set, it defaults to `index.js` in the package's root folder.
 ==以上是文档全文==
 
 <https://docs.npmjs.com/cli/v10/configuring-npm/package-json#main>
+
+npm version 10.5.2
