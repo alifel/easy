@@ -50,10 +50,10 @@ The underlying Git plumbing tools, such as git ls-files and git read-tree, read 
     斜杠“`/`”是目录分隔符。分隔符可以出现在`.gitignore` search pattern的开始、中间和结尾。
 
 - If there is a separator at the beginning or middle (or both) of the pattern, then the pattern is relative to the directory level of the particular `.gitignore` file itself. Otherwise the pattern may also match at any level below the `.gitignore` level.
-    ==如果分隔符在pattern的开始和中间，则pattern是相对于`.gitignore`自身的目录这一级的。其他情况pattern也能够匹配`.gitignore`下面的任意一级。==
+    ==如果分隔符在pattern的开始和中间，则pattern是相对于`.gitignore`自身的目录这一级的。其他情况pattern也能够匹配`.gitignore`下面的任意一级。== (:pill::warning:**这一点特别需要注意**)
 
 - If there is a separator at the end of the pattern then the pattern will only match directories, otherwise the pattern can match both files and directories.
-    ==如果分隔符在pattern的结尾，则它仅仅匹配目录，其他情况既会匹配文件又会匹配目录。==
+    ==如果分隔符在pattern的结尾，则它仅仅匹配目录，其他情况既会匹配文件又会匹配目录。== (:pill::warning:**这一点特别需要注意**)
 
 - For example, a pattern `doc/frotz/` matches `doc/frotz` directory, but not `a/doc/frotz` directory; however `frotz/` matches `frotz` and `a/frotz` that is a directory (all paths are relative from the `.gitignore` file).
     例如，一个pattern`doc/frotz/`会匹配`doc/frotz`目录，但是不会匹配`a/doc/frotz`目录 ==（***:pill::pill::pill: Why？因为`doc/frotz/`在中间和结尾分别有一个分隔符（“`/`”），所以中间的分隔符会导致pattern相对于`.gitignore`这一级目录，所以它不会匹配`a/doc/frotz`，而结尾的分隔符会导致仅仅匹配目录，而不匹配文件***）==；可是`frotz/`匹配`frotz`和目录`a/frotz`（所有路径都相对于`.gitignore`文件） ==（***:pill::pill::pill: Why？因为`frotz/`在中间和开头都没有分隔符（“`/`”），所以这种情况会导致pattern不光相对于`.gitignore`这一级目录，也相对于`.gitignore`下面的任意一级目录，所以它会匹配`frotz`和`a/frotz`，而结尾的分隔符会导致仅仅匹配目录，而不匹配文件，所以`frotz`和`a/frotz`必须都是目录***）==。
