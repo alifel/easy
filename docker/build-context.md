@@ -130,11 +130,82 @@ Use the following syntax to build an image using files on your local filesystem,
 $ docker build -f- PATH
 ```
 
-The syntax uses the -f (or --file) option to specify the Dockerfile to use, and it uses a hyphen (-) as filename to instruct Docker to read the Dockerfile from stdin.
+The syntax uses the `-f` (or `--file`) option to specify the `Dockerfile` to use, and it uses a hyphen (`·`) as filename to instruct Docker to read the `Dockerfile` from stdin.
 
+这个语法使用了`-f`（或者`--file`）选项指定了被使用的`Dockerfile`，它用一个连字符(`-`)作为文件名，来告诉Docker通过标准输入读取`Dockerfile`
 
+The following example uses the current directory (`.`) as the build context, and builds an image using a `Dockerfile` passed through stdin using a here-document.
+
+下面的例子使用了当前目录（`.`）作为了构建context，使用了通过标准输入（[使用here-document](../linux/here-document.md)）送入的`Dockerfile`构建了一个对象。
+
+```sh
+# create a directory to work in
+mkdir example
+cd example
+
+# create an example file
+touch somefile.txt
+
+# build an image using the current directory as context
+# and a Dockerfile passed through stdin
+docker build -t myimage:latest -f- . <<EOF
+FROM busybox
+COPY somefile.txt ./
+RUN cat /somefile.txt
+EOF
+```
+
+==(:pill: 上面用了`EOF`作为 ***here document***的 ***limit string***，关于 ***limit string***，请看[使用here-document](../linux/here-document.md)。 其实这里`EOF`可以替换成任意字符串，只要足够特别，在要输入的代码块中不存在，不会造成混淆就可以)==
+
+==看下面这个例子，与上面的代码作用相同（自己写的，非官方文档）==
+
+```sh
+# create a directory to work in
+mkdir example
+cd example
+
+# create an example file
+touch somefile.txt
+
+# build an image using the current directory as context
+# and a Dockerfile passed through stdin
+docker build -t myimage:latest -f- . <<jn123nn
+FROM busybox
+COPY somefile.txt ./
+RUN cat /somefile.txt
+jn123nn
+```
 
 ### Local tarballs {#local-tarballs}
+
+When you pipe a tarball to the build command, the build uses the contents of the tarball as a filesystem context.
+
+当你通过管道给build命令送入一个tarball，会使用这个tarball的内容作为一个filesystem context进行构建。
+
+For example, given the following project directory:
+
+例如，给下面的项目目录：
+
+```text
+├── Dockerfile
+├── Makefile
+├── README.md
+├── main.c
+├── scripts
+├── src
+└── test.Dockerfile
+```
+
+You can create a tarball of the directory and pipe it to the build for use as a context:
+
+你可以创建一个这个目录的tarball，然后通过管道送入构建器来作为一个context：
+
+```sh
+ $ tar czf foo.tar.gz *
+ $ docker build - < foo.tar.gz
+```
+
+The build resolves the Dockerfile from the tarball context. You can use the --file flag to specify the name and location of the Dockerfile relative to the root of the tarball. The following command builds using test.Dockerfile in the tarball:
 
 ## Remote Context
 
