@@ -205,9 +205,21 @@ You can create a tarball of the directory and pipe it to the build for use as a 
  $ docker build - < foo.tar.gz
 ```
 
-The build resolves the Dockerfile from the tarball context. You can use the --file flag to specify the name and location of the Dockerfile relative to the root of the tarball. The following command builds using test.Dockerfile in the tarball:
+The build resolves the `Dockerfile` from the tarball context. You can use the `--file` flag to specify the name and location of the `Dockerfile` relative to the root of the tarball. The following command builds using `test.Dockerfile` in the tarball:
+
+构建器从tarball context中解析`Dockerfile`。你也可以使用`--file` flag去指定`Dockerfile`的名字和位置（相对于tarball的根目录）。下面的命令，构建时使用了tarball中的 `text.Dockerfile`。
+
+```sh
+$ docker build --file test.Dockerfile - < foo.tar.gz
+```
 
 ## Remote Context
+
+You can specify the address of a remote Git repository, tarball, or plain-text file as your build context.
+
+For Git repositories, the builder automatically clones the repository. See Git repositories.
+For tarballs, the builder downloads and extracts the contents of the tarball. See Tarballs.
+If the remote tarball is a text file, the builder receives no filesystem context, and instead assumes that the remote file is a Dockerfile. See Empty build context.
 
 ### Git repositories {#git-repositories}
 
