@@ -57,7 +57,7 @@ If you're interested in learning the precise details of the `.dockerignore` patt
 
 如果你有兴趣学习`.dockerignore`规则匹配的精确细节，可以在GitHub检出[moby/patternmatcher repository](https://github.com/moby/patternmatcher/tree/main/ignorefile) ，它包含了源码。
 
-## Matching
+### Matching
 
 The following code snippet shows an example `.dockerignore` file.
 
@@ -95,11 +95,58 @@ Matching is done using Go's [filepath.Match function](#filepath-match-function) 
 
 Beyond Go's `filepath.Match` rules, Docker also supports a special wildcard string `**` that matches any number of directories (including zero). For example, `**/*.go` excludes all files that end with `.go` found anywhere in the build context.
 
-超出Go的`filepath.Math`规则，Docker也支持`**`通配符，来匹配任意数量的目录（包括0级）。例如，`**/*.go`将会排除所有以`.go`结尾的文件(:pill:==我个人觉得还应该包括目录==)（在构建上下文的任意位置）
+超出Go的`filepath.Math`规则，Docker也支持`**`通配符，来匹配任意数量的目录（包括0级）。例如，`**/*.go`将会排除所有以`.go`结尾的文件(:pill:==我个人觉得还应该包括目录，需要进一步测试验证==)（在构建上下文的任意位置）
 
 You can use the `.dockerignore` file to exclude the `Dockerfile` and `.dockerignore` files. These files are still sent to the builder as they're needed for running the build. But you can't copy the files into the image using `ADD`, `COPY`, or bind mounts.
 
 你也可以使用`.dockerignore`文件排除`Dockerfile`和`.dockerignore`文件。这些文件仍然会发送给构建器，因为它们在构建的时候需要。但是你不能复制这些文件取你的镜像（通过`ADD`, `COPY`, 或者 bind mounts）。
+
+### Negating matches
+
+You can prepend lines with a `!` (exclamation mark) to make exceptions to exclusions. The following is an example `.dockerignore` file that uses this mechanism:
+
+你可以以一个`!`（感叹号）来标记忽略这个排除规则。下面是一个例子，这个`.dockerignore`使用了这一机制：
+
+```.dockerignore
+*.md
+!README.md
+```
+
+All markdown files right under the context directory except `README.md` are excluded from the context. 
+
+所有context目录下面的markdown文件（除了`README.md`）都被从上下文中排除了。
+
+Note that markdown files under subdirectories are still included.
+
+注意，在子目录下的markdown文件仍然被包含。
+
+The placement of `!` exception rules influences the behavior: the last line of the `.dockerignore` that matches a particular file determines whether it's included or excluded. Consider the following example:
+
+`!`排除规则的影响：`.dockerignore`中，匹配特定文件的最后一行，决定了它是否被包含还是排除。考虑下面的例子：
+
+```.dockerignore
+*.md
+!README*.md
+README-secret.md
+```
+
+No markdown files are included in the context except `README` files other than `README-secret.md`.
+
+没有markdown文件被包含在context中（除了`README`文件(这里的`README`文件指`README`开头的markdown文件)，但是这些`README`文件不包括`README-secret.md`）。
+
+Now consider this example:
+
+现在考虑下面的例子：
+
+```.dockerignore
+*.md
+README-secret.md
+!README*.md
+```
+
+All of the `README` files are included. The middle line has no effect because `!README*.md` matches `README-secret.md` and comes last.
+
+所有的`README`文件都被包含，中间的行不会有作用，因为`!README*.md`匹配`README-secret.md`，并且它在最后。
 
 ---
 
