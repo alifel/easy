@@ -1,4 +1,4 @@
-# Buildin
+# Builtin (Bash internal)
 
 A builtin is a command contained within the Bash tool set, literally built in. This is either for performance reasons -- builtins execute faster than external commands, which usually require forking off [^1] a separate process -- or because a particular builtin needs direct access to the shell internals.
 

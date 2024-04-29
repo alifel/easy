@@ -46,7 +46,7 @@ exit 0               # Not necessary; script will never get to here.
 
 Generally, a Bash builtin does not fork a subprocess when it executes within a script. An external system command or filter in a script usually will fork a subprocess.
 
-通常，在脚本执行时，bash的内建命令不会创建子进程。脚本中的外部的命令或者过滤器会创建1个子进程。
+通常，在脚本执行时，bash的[builtin](./bash-scripting-internal-builtin.md)不会创建子进程。脚本中的外部的命令或者过滤器会创建1个子进程。
 
 ---
 
