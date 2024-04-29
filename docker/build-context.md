@@ -217,8 +217,11 @@ $ docker build --file test.Dockerfile - < foo.tar.gz
 
 You can specify the address of a remote Git repository, tarball, or plain-text file as your build context.
 
-For Git repositories, the builder automatically clones the repository. See Git repositories.
-For tarballs, the builder downloads and extracts the contents of the tarball. See Tarballs.
+- For Git repositories, the builder automatically clones the repository. See Git repositories.
+- For tarballs, the builder downloads and extracts the contents of the tarball. See Tarballs.
+
+你指定一个远程仓库地址
+
 If the remote tarball is a text file, the builder receives no filesystem context, and instead assumes that the remote file is a Dockerfile. See Empty build context.
 
 ### Git repositories {#git-repositories}
