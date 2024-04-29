@@ -1,4 +1,4 @@
-# fock (Bash internal)
+# fock (Bash)
 
 When a command or the shell itself initiates (or spawns) a new subprocess to carry out a task, this is called forking. This new process is the child, and the process that forked it off is the parent. While the child process is doing its work, the parent process is still executing.
 
