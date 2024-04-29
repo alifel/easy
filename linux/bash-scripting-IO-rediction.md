@@ -1,4 +1,4 @@
-# I/O rediction
+# Chapter 20. I/O Redirection
 
 There are always three default files [^1] open, stdin (the keyboard), stdout (the screen), and stderr (error messages output to the screen). These, and any other open files, can be redirected. Redirection simply means capturing output from a file, command, program, script, or even code block within a script (see [Example 3-1](https://tldp.org/LDP/abs/html/special-chars.html#EX8) and [Example 3-2](https://tldp.org/LDP/abs/html/special-chars.html#RPMCHECK)) and sending it as input to another file, command, program, or script.
 
@@ -14,7 +14,9 @@ Each open file gets assigned a file descriptor. [^2] The file descriptors for st
 
 文件描述符是操作系统赋予一个已经打开文件的简单数字，用来追踪文件。可以把它认为是简化了的文件指针类型。它与在C中处理1个文件是类似的。
 
-[^3]: Using file descriptor 5 might cause problems. When Bash creates a child process, as with exec, the child inherits fd 5 (see Chet Ramey's archived e-mail, [SUBJECT: RE: File descriptor](http://groups.google.com/group/gnu.bash.bug/browse_thread/thread/13955daafded3b5c/18c17050087f9f37) 5 is held open). Best leave this particular fd alone.
+[^3]: Using file descriptor 5 might cause problems. When Bash creates a child process, as with [exec](./bash-scripting-exec.md), the child inherits fd 5 (see Chet Ramey's archived e-mail, [SUBJECT: RE: File descriptor](http://groups.google.com/group/gnu.bash.bug/browse_thread/thread/13955daafded3b5c/18c17050087f9f37) 5 is held open). Best leave this particular fd alone.
+
+用文件描述符5可能会导致问题，当Bash创建1个子进程后，
 
 ---
 
