@@ -6,17 +6,11 @@ There are always three default files [^1] open, stdin (the keyboard), stdout (th
 
 Each open file gets assigned a file descriptor. [^2] The file descriptors for stdin, stdout, and stderr are 0, 1, and 2, respectively. For opening additional files, there remain descriptors 3 to 9. It is sometimes useful to assign one of these additional file descriptors to stdin, stdout, or stderr as a temporary duplicate link. [^3] This simplifies restoration to normal after complex redirection and reshuffling (see Example 20-1).
 
-[^1]: By convention in UNIX and Linux, data streams and peripherals ([device files](https://tldp.org/LDP/abs/html/devref1.html#DEVFILEREF)) are treated as files, in a fashion analogous to ordinary files.
+[^1]: By convention in UNIX and Linux, data streams and peripherals ([device files](https://tldp.org/LDP/abs/html/devref1.html#DEVFILEREF)) are treated as files, in a fashion analogous to ordinary files.按UNIX和Linux的惯例，数据流和外围设备([device files](https://tldp.org/LDP/abs/html/devref1.html#DEVFILEREF))都被作为文件，类似于普通文件的处理方式。
 
-按UNIX和Linux的惯例，数据流和外围设备([device files](https://tldp.org/LDP/abs/html/devref1.html#DEVFILEREF))都被作为文件，类似于普通文件的处理方式。
+[^2]: A file descriptor is simply a number that the operating system assigns to an open file to keep track of it. Consider it a simplified type of file pointer. It is analogous to a file handle in C.文件描述符是操作系统赋予一个已经打开文件的简单数字，用来追踪文件。可以把它认为是简化了的文件指针类型。它与在C中处理1个文件是类似的。
 
-[^2]: A file descriptor is simply a number that the operating system assigns to an open file to keep track of it. Consider it a simplified type of file pointer. It is analogous to a file handle in C.
-
-文件描述符是操作系统赋予一个已经打开文件的简单数字，用来追踪文件。可以把它认为是简化了的文件指针类型。它与在C中处理1个文件是类似的。
-
-[^3]: Using file descriptor 5 might cause problems. When Bash creates a child process, as with [exec](./bash-scripting-exec.md), the child inherits fd 5 (see Chet Ramey's archived e-mail, [SUBJECT: RE: File descriptor](http://groups.google.com/group/gnu.bash.bug/browse_thread/thread/13955daafded3b5c/18c17050087f9f37) 5 is held open). Best leave this particular fd alone.
-
-用文件描述符5可能会导致问题，当Bash创建1个子进程后，
+[^3]: Using file descriptor 5 might cause problems. When Bash creates a child process, as with [exec](./bash-scripting-exec.md), the child inherits fd 5 (see Chet Ramey's archived e-mail, [SUBJECT: RE: File descriptor](http://groups.google.com/group/gnu.bash.bug/browse_thread/thread/13955daafded3b5c/18c17050087f9f37) 5 is held open). Best leave this particular fd alone.用文件描述符5可能会导致问题，当Bash创建1个子进程后，
 
 ---
 
