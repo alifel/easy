@@ -44,3 +44,9 @@ If not specified, the default working directory is `/`. In practice, if you aren
 Therefore, to avoid unintended operations in unknown directories, it's best practice to set your `WORKDIR` explicitly.
 
 因此，为了避免在未知的目录中执行以意外的操作，最佳实践是精确的设置你自己的`WORKDIR`。
+
+--
+
+==官方文档==
+
+<https://docs.docker.com/reference/dockerfile/#workdir>
