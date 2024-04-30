@@ -82,7 +82,26 @@ COPY arr[[]0].txt /mydir/
 
 ==如果你构建时使用了STDIN (`docker build - < somefile`), 这会导致没有构建上context，所以COPY不能使用。==
 
-Optionally `COPY` accepts a flag --from=`<name>` that can be used to set the source location to a previous build stage (created with FROM .. AS `<name>`) that will be used instead of a build context sent by the user. In case a build stage with a specified name can't be found an image with the same name is attempted to be used instead.
+Optionally `COPY` accepts a flag `--from=<name>` that can be used to set the source location to a previous build stage (created with `FROM .. AS <name>`) that will be used instead of a build context sent by the user. In case a build stage with a specified name can't be found an image with the same name is attempted to be used instead.
+
+`COPY` obeys the following rules:
+
+- the `<src>` path is resolved relative to the build context. If you specify a relative path leading outside of the build context, such as `COPY ../something /something`, parent directory paths are stripped out automatically. The effective source path in this example becomes `COPY something /something`
+- If `<src>` is a directory, the entire contents of the directory are copied, including filesystem metadata.
+  :warning: ==NOTE==
+  ==The directory itself isn't copied, only its contents.==
+- If `<src>` is any other kind of file, it's copied individually along with its metadata. In this case, if `<dest>` ends with a trailing slash /, it will be considered a directory and the contents of `<src>` will be written at `<dest>/base(<src>)`.
+- If multiple `<src>` resources are specified, either directly or due to the use of a wildcard, then `<dest>` must be a directory, and it must end with a slash `/`.
+- If `<src>` is a file, and `<dest>` doesn't end with a trailing slash, the contents of `<src>` will be written as filename `<dest>`.
+- If `<dest>` doesn't exist, it's created, along with all missing directories in its path.
+
+`COPY`服从下面的规则：
+
+- `<src>`路径的解析相对于构建context。如果你指定了相对路径导致定位到了构建context外面，例如`COPY ../something /something`，父目录路径会自动被删除。`COPY something /something`
+
+:warning: ==NOTE==
+
+==The first encountered COPY instruction will invalidate the cache for all following instructions from the Dockerfile if the contents of `<src>` have changed. This includes invalidating the cache for RUN instructions. See the Dockerfile Best Practices guide – Leverage build cache for more information.==
 
 ---
 
