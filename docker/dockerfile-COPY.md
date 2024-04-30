@@ -26,7 +26,7 @@ The `COPY` instruction copies new files or directories from `<src>` and adds the
 
 Multiple `<src>` resources may be specified but the paths of files and directories will be interpreted as relative to the source of the context of the build.
 
-也可以指定多个`<src>`，但是文件和目录的路径解释时，是相对于构建context的。（:pill:比如`/`代表的是构建context的根目录，而不是本地主机的根目录）
+也可以指定多个`<src>`，但是文件和目录的路径解释时，是相对于构建context的。（:pill:比如`/`代表的是构建context的根目录，而不是本地主机的根目录）(:pill:==重中之重==)
 
 Each `<src>` may contain wildcards and matching will be done using Go's [filepath.Match](./dockerignore.md#filepath-match-function) rules. For example:
 
@@ -50,7 +50,7 @@ COPY hom?.txt /mydir/
 
 The `<dest>` is an absolute path, or a path relative to `WORKDIR`, into which the source will be copied inside the destination container.
 
-`<dest>`是一个绝对路径，或者`WORKDIR`的相对路径，将源文件复制到目标容器中。
+`<dest>`是一个绝对路径，或者`WORKDIR`的相对路径，将源文件复制到目标容器中。(:pill:==重中之重==)
 
 The example below uses a relative path, and adds `"test.txt"` to `<WORKDIR>/relativeDir/`:
 
@@ -67,6 +67,22 @@ Whereas this example uses an absolute path, and adds `"test.txt"` to `/absoluteD
 ```Dockerfile
 COPY test.txt /absoluteDir/
 ```
+
+When copying files or directories that contain special characters (such as `[` and `]`), you need to escape those paths following the Golang rules to prevent them from being treated as a matching pattern. For example, to copy a file named `arr[0].txt`, use the following;
+
+当复制文件或者目录包含字符（如：`[` and `]`）时，你需要按Golang的规则转义这些路径，以阻止他们被视为匹配pattern。例如，你可以复制1个名叫`arr[0].txt`的文件，用下面的内容：
+
+```Dockerfile
+COPY arr[[]0].txt /mydir/
+```
+
+==:warning: NOTE==
+
+==If you build using STDIN (`docker build - < somefile`), there is no build context, so COPY can't be used.==
+
+==如果你构建时使用了STDIN (`docker build - < somefile`), 这会导致没有构建上context，所以COPY不能使用。==
+
+Optionally `COPY` accepts a flag --from=`<name>` that can be used to set the source location to a previous build stage (created with FROM .. AS `<name>`) that will be used instead of a build context sent by the user. In case a build stage with a specified name can't be found an image with the same name is attempted to be used instead.
 
 ---
 
