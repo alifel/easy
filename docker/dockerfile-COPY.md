@@ -26,11 +26,19 @@ The `COPY` instruction copies new files or directories from `<src>` and adds the
 
 Multiple `<src>` resources may be specified but the paths of files and directories will be interpreted as relative to the source of the context of the build.
 
-可以指定多个`<src>`，文件和目录的路径
+(:pill:==上面这句不知道如何理解==)
 
-Each <src> may contain wildcards and matching will be done using Go's filepath.Match rules. For example:
+Each `<src>` may contain wildcards and matching will be done using Go's [filepath.Match](./dockerignore.md#filepath-match-function) rules. For example:
+
+每个`<src>`也可以包含通配符，将使用Go的[filepath.Match](./dockerignore.md#filepath-match-function) 规则进行匹配。例如：
 
 To add all files in the root of the build context starting with "hom":
+
+添加构建上下文根目录中以 "hom" 开头的所有文件：
+
+```Dockerfile
+COPY hom* /mydir/
+```
 
 ---
 
