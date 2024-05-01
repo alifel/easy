@@ -84,24 +84,35 @@ COPY arr[[]0].txt /mydir/
 
 Optionally `COPY` accepts a flag `--from=<name>` that can be used to set the source location to a previous build stage (created with `FROM .. AS <name>`) that will be used instead of a build context sent by the user. In case a build stage with a specified name can't be found an image with the same name is attempted to be used instead.
 
+可选的，`COPY`接受1个flag `--from=<name>`，可以用来设定源的位置指向之前的构建阶段(用 `FROM .. AS <name>`)，而不是用户发送的构建 context。在这样的例子中，如果一个指定名的构建阶段没有被找到，将会使用同名的镜像。
+
 `COPY` obeys the following rules:
 
 - the `<src>` path is resolved relative to the build context. If you specify a relative path leading outside of the build context, such as `COPY ../something /something`, parent directory paths are stripped out automatically. The effective source path in this example becomes `COPY something /something`
 - If `<src>` is a directory, the entire contents of the directory are copied, including filesystem metadata.
   :warning: ==NOTE==
   ==The directory itself isn't copied, only its contents.==
-- If `<src>` is any other kind of file, it's copied individually along with its metadata. In this case, if `<dest>` ends with a trailing slash /, it will be considered a directory and the contents of `<src>` will be written at `<dest>/base(<src>)`.
+- If `<src>` is any other kind of file, it's copied individually along with its metadata. In this case, if `<dest>` ends with a trailing slash `/`, it will be considered a directory and the contents of `<src>` will be written at `<dest>/base(<src>)`.
 - If multiple `<src>` resources are specified, either directly or due to the use of a wildcard, then `<dest>` must be a directory, and it must end with a slash `/`.
 - If `<src>` is a file, and `<dest>` doesn't end with a trailing slash, the contents of `<src>` will be written as filename `<dest>`.
 - If `<dest>` doesn't exist, it's created, along with all missing directories in its path.
 
-`COPY`服从下面的规则：
+`COPY`服从下面的规则(:pill:==重中之重==)：
 
-- `<src>`路径的解析相对于构建context。如果你指定了相对路径导致定位到了构建context外面，例如`COPY ../something /something`，父目录路径会自动被删除。`COPY something /something`
+- `<src>`路径的解析相对于构建context。如果你指定了相对路径导致定位到了构建context外面，例如`COPY ../something /something`，父目录路径会自动被删除。在这个例子中，实际起作用的路径变为`COPY something /something`
+- 如果`<scr>` 是一个目录，完整目录的内容被拷贝，包括文件系统的metadata。
+  :warning: ==NOTE==
+  ==文件夹自身不会被拷贝，拷贝的仅仅是内容.==
+- 如果`<src>`是其他类型的文件，它与自身metadata一起被复制。在这个例子中功能，如果`<dest>`以斜杠`/`结尾，它将被看作是目录，`<src>`的内容将被写入`<dest>/base(<src>)`。(:pill:==**批注**：如果`<src>`是一个目录，无论`<dest>`是否以斜杆`/`结尾，都将被看作一个目录。如果`<src>`是单文件，`<dest>`没有以斜杠`/`结尾，则认为复制后重命名为了`<dest>`。==)
+- 如果多个 `<src>` 指被指定，要么是直接指定，要么使用了通配符，则`<dest>`一定是一个目录，它必须以斜杠`/`结尾。(:pill:==**批注**：如果没有以斜杠`/`结尾，则第一个`<src>`被复制，并且重命名为了`<dest>`。==)
+- 如果`<src>`是一个文件，`<dest>`没有以斜杠`/`结尾，`<src>`的内容将被写入名为`<dest>`的文件。
+- 如果`<dest>`不存在，它会被创建，包括沿着路径中所有丢失的目录。
 
 :warning: ==NOTE==
 
-==The first encountered COPY instruction will invalidate the cache for all following instructions from the Dockerfile if the contents of `<src>` have changed. This includes invalidating the cache for RUN instructions. See the Dockerfile Best Practices guide – Leverage build cache for more information.==
+==The first encountered `COPY` instruction will invalidate the cache for all following instructions from the Dockerfile if the contents of `<src>` have changed. This includes invalidating the cache for `RUN` instructions. See the Dockerfile Best Practices guide – Leverage build cache for more information.==
+
+==如果`<src>`的内容发生了变化，Dockerfile中第一个遇到的`COPY`指令将使后续其他指令的缓存失效。这包括`RUN`指令的缓存也失效。看[Dockerfile Best Practices guide](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache)` - 了解更多如何充分利用缓存==
 
 ---
 
