@@ -114,6 +114,45 @@ Optionally `COPY` accepts a flag `--from=<name>` that can be used to set the sou
 
 ==如果`<src>`的内容发生了变化，Dockerfile中第一个遇到的`COPY`指令将使后续其他指令的缓存失效。这包括`RUN`指令的缓存也失效。看[Dockerfile Best Practices guide](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache)` - 了解更多如何充分利用缓存==
 
+## `COPY --from`
+
+By default, the `COPY` instruction copies files from the build context. The `COPY --from` flag lets you copy files from an image, a build stage, or a named context instead.
+
+默认情况下，`COPY`指令从构建从构建context复制文件。`COPY --from`让你从镜像，构建stage，或者命名上下文复制文件。
+
+```Dockerfile
+COPY [--from=<image|stage|context>] <src> ... <dest>
+```
+
+To copy from a build stage in a [multi-stage build](https://docs.docker.com/build/building/multi-stage/), specify the name of the stage you want to copy from. You specify stage names using the `AS` keyword with the `FROM` instruction.
+
+从一个[multi-stage build](https://docs.docker.com/build/building/multi-stage/)的构建stage中复制，指定你想要从其中复制的stage名字。使用`FROM`指令的`AS`关键字来指定stage的名称。
+
+```Dockerfile
+# syntax=docker/dockerfile:1
+FROM alpine AS build
+COPY . .
+RUN apk add clang
+RUN clang -o /hello hello.c
+
+FROM scratch
+COPY --from=build /hello /
+```
+
+You can also copy files directly from other images. The following example copies an `nginx.conf` file from the official Nginx image.
+
+你也可以从其他镜像中复制文件。下面的例子从官方Nginx镜像中复制`nginx.conf`。
+
+```Dockerfile
+COPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf
+```
+
+The source path of `COPY --from` is always resolved from filesystem root of the image or stage that you specify.
+
+`COPY --from` 的源路径一直是从你指定的镜像或者过stage的文件系统根目录解析的。
+
+## `COPY --chown --chmod`
+
 ---
 
 <https://docs.docker.com/reference/dockerfile/#copy>
