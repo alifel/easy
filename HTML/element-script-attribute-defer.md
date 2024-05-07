@@ -22,7 +22,7 @@ Scripts with the `defer` attribute will execute in the order in which they appea
 
 This attribute allows the elimination of parser-blocking JavaScript where the browser would have to load and evaluate scripts before continuing to parse. async has a similar effect in this case.
 
-这个属性允许移除parser-blocking JavaScript，浏览器必须等待脚本加载和evaluating之后才能继续解析。async也有类似的效果。
+这个属性允许移除parser-blocking JavaScript(浏览器必须等待脚本加载和evaluating之后才能继续解析)。async也有类似的效果。
 
 ---
 
