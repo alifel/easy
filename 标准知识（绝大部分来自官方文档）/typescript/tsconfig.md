@@ -267,3 +267,36 @@ Important: `exclude` only changes which files are included as a result of the `i
 It is not a mechanism that prevents a file from being included in the codebase - it simply changes what the `include` setting finds.
 
 这不是一个防止文件被包含在代码库中的机制 - 它只是改变了 `include` 设置所找到的内容。
+
+## Files - `files`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#files>*==)
+
+Default:false
+
+默认值：false
+
+Specifies an allowlist of files to include in the program. An error occurs if any of the files can’t be found.
+
+指定一个允许列表，列出要包含在程序中的文件。如果任何文件无法找到，将会发生错误。
+
+```json
+{
+  "compilerOptions": {},
+  "files": [
+    "core.ts",
+    "sys.ts",
+    "types.ts",
+    "scanner.ts",
+    "parser.ts",
+    "utilities.ts",
+    "binder.ts",
+    "checker.ts",
+    "tsc.ts"
+  ]
+}
+```
+
+This is useful when you only have a small number of files and don’t need to use a glob to reference many files. If you need that then use `include`.
+
+当你只有少量文件，不需要使用通配符来引用多个文件时，这个选项很有用。如果你需要引用大量文件，那么应该使用 include。
