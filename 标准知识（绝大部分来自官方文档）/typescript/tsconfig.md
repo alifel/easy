@@ -94,3 +94,27 @@ strict 标志启用了广泛的类型检查行为，从而为程序的正确性�
 Future versions of TypeScript may introduce additional stricter checking under this flag, so upgrades of TypeScript might result in new type errors in your program. When appropriate and possible, a corresponding flag will be added to disable that behavior.
 
 TypeScript 的未来版本可能会在这个标志下引入额外的更严格的检查，因此 TypeScript 的升级可能会在你的程序中产生新的类型错误。在适当且可能的情况下，会添加相应的标志来禁用该行为。
+
+## Skip Lib Check - `skipLibCheck`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#skipLibCheck>*==)
+
+Skip type checking of declaration files.
+
+跳过声明文件的类型检查。
+
+This can save time during compilation at the expense of type-system accuracy. For example, two libraries could define two copies of the same type in an inconsistent way. Rather than doing a full check of all d.ts files, TypeScript will type check the code you specifically refer to in your app’s source code.
+
+这可以在编译过程中节省时间，但代价是牺牲类型系统的准确性。例如，两个库可能以不一致的方式定义了同一类型的两个副本。TypeScript 不会对所有的 d.ts 文件进行完整检查，而是只对你在应用程序源代码中特别引用的代码进行类型检查。
+
+A common case where you might think to use skipLibCheck is when there are two copies of a library’s types in your node_modules. In these cases, you should consider using a feature like yarn’s resolutions to ensure there is only one copy of that dependency in your tree or investigate how to ensure there is only one copy by understanding the dependency resolution to fix the issue without additional tooling.
+
+一个你可能会考虑使用 skipLibCheck 的常见情况是，当你的 node_modules 中存在一个库的两个副本类型定义时。在这些情况下，你应该考虑使用像 yarn 的 resolutions 这样的功能来确保依赖树中只有一个该依赖的副本，或者通过理解依赖解析来调查如何确保只有一个副本，从而在不使用额外工具的情况下解决问题。
+
+Another possibility is when you are migrating between TypeScript releases and the changes cause breakages in node_modules and the JS standard libraries which you do not want to deal with during the TypeScript update.
+
+另一种可能性是当你在 TypeScript 版本之间迁移时，这些变化可能导致 node_modules 和 JS 标准库中出现你不想在 TypeScript 更新过程中处理的问题。
+
+Note, that if these issues come from the TypeScript standard library you can replace the library using [TypeScript 4.5’s lib replacement](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#supporting-lib-from-node_modules) technique.
+
+注意，如果这些问题来自 TypeScript 标准库，你可以使用 [TypeScript 4.5’s lib replacement](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#supporting-lib-from-node_modules)技术。
