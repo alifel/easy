@@ -190,3 +190,80 @@ Use `outFile` instead.
 The `out` option computes the final file location in a way that is not predictable or consistent. This option is retained for backward compatibility only and is deprecated.
 
 `out` 选项计算最终文件位置的方式是不可预测且不一致的。这个选项仅为了向后兼容而保留，并且已被废弃。
+
+## Include - `include`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#include>*==)
+
+Default:`[]` if `files` is specified; `**/*` otherwise.
+
+如果指定了 `files`，默认值为 `[]`；否则为 `**/*`。
+
+Specifies an array of filenames or patterns to include in the program. These filenames are resolved relative to the directory containing the `tsconfig.json` file.
+
+指定一个文件名数组或patterns，用于包含在程序中。这些文件名是相对于包含 tsconfig.json 文件的目录来解析的。
+
+```json
+{
+  "include": ["src/**/*", "tests/**/*"]
+}
+```
+
+Which would include:
+
+这将包括：
+
+```shell
+.
+├── scripts                ⨯
+│   ├── lint.ts            ⨯
+│   ├── update_deps.ts     ⨯
+│   └── utils.ts           ⨯
+├── src                    ✓
+│   ├── client             ✓
+│   │    ├── index.ts      ✓
+│   │    └── utils.ts      ✓
+│   ├── server             ✓
+│   │    └── index.ts      ✓
+├── tests                  ✓
+│   ├── app.test.ts        ✓
+│   ├── utils.ts           ✓
+│   └── tests.d.ts         ✓
+├── package.json
+├── tsconfig.json
+└── yarn.lock
+```
+
+`include` and `exclude` support wildcard characters to make glob patterns:
+
+- `*` matches zero or more characters (excluding directory separators)
+- `?` matches any one character (excluding directory separators)
+- `**/` matches any directory nested to any level
+
+`include` 和 `exclude` 支持通配符来创建 `glob patterns`：
+
+- `*` 匹配零个或多个字符（不包括目录分隔符）
+- `?` 匹配任意一个字符（不包括目录分隔符）
+- `**/` 匹配任意嵌套深度的任何目录
+
+If the last path segment in a pattern does not contain a file extension or wildcard character, then it is treated as a directory, and files with supported extensions inside that directory are included (e.g. `.ts`, `.tsx`, and `.d.ts` by default, with `.js` and `.jsx` if [allowJs](https://www.typescriptlang.org/tsconfig/#allowJs) is set to true).
+
+如果模式中的最后一个路径段不包含文件扩展名或通配符，则它被视为一个目录，该目录内具有支持的扩展名的文件将被包含（例如，默认情况下为 `.ts`、`.tsx` 和 `.d.ts`，如果设置了 [allowJs](https://www.typescriptlang.org/tsconfig/#allowJs) 为 true，则还包括 `.js` 和 `.jsx`）。
+
+## Exclude - `exclude`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#exclude>*==)
+
+Default: `node_modules` `bower_components` `jspm_packages` `outDir`
+
+Specifies an array of filenames or patterns that should be skipped when resolving `include`.
+
+指定一个文件名或patterns的数组，这些文件或模式在解析 `include` 时应被跳过。
+
+Important: `exclude` only changes which files are included as a result of the `include` setting. A file specified by `exclude` can still become part of your codebase due to an `import` statement in your code, a `types` inclusion, a `/// <reference directive`, or being specified in the `files` list.
+
+重要提示：`exclude` 只改变由 `include` 设置包含的文件。被 `exclude` 指定的文件仍可能因为你代码中的 `import` 语句、`types` 包含、`/// <reference` 指令，或被列在 `files` 列表中而成为你代码库的一部分。
+
+It is not a mechanism that prevents a file from being included in the codebase - it simply changes what the `include` setting finds.
+
+这不是一个防止文件被包含在代码库中的机制 - 它只是改变了 `include` 设置所找到的内容。
