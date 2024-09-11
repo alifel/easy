@@ -353,3 +353,85 @@ When you have this option set, by not including a module in the `types` array it
 This feature differs from `typeRoots` in that it is about specifying only the exact types you want included, whereas `typeRoots` supports saying you want particular folders.
 
 这个特性与 `typeRoots` 的不同之处在于，它是关于只指定你想包含的确切类型，而 `typeRoots` 支持指定你想要的特定文件夹。
+
+## Base URL - `baseUrl`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#baseUrl>*==)
+
+Sets a base directory from which to resolve bare specifier module names. For example, in the directory structure:
+
+设置一个基本目录，用于解析裸模块名称。例如，在以下目录结构中：
+
+```shell
+project
+├── ex.ts
+├── hello
+│   └── world.ts
+└── tsconfig.json
+```
+
+With `"baseUrl": "./"`, TypeScript will look for files starting at the same folder as the `tsconfig.json`:
+
+使用 `"baseUrl": "./"`，TypeScript 将从 `tsconfig.json` 所在的文件夹开始查找文件：
+
+```typescript
+import { helloWorld } from "hello/world";
+console.log(helloWorld);
+```
+
+This resolution has higher priority than lookups from `node_modules`.
+
+这种解析优先于从 `node_modules` 中查找。
+
+This feature was designed for use in conjunction with AMD module loaders in the browser, and is not recommended in any other context. As of TypeScript 4.1, `baseUrl` is no longer required to be set when using `paths`.
+
+这个特性是为在浏览器中与 AMD 模块加载器一起使用而设计的，不推荐在其他任何上下文中使用。从 TypeScript 4.1 开始，使用 `paths` 时不再需要设置 `baseUrl`。
+
+## Paths - `paths`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#paths>*==)
+
+A series of entries which re-map imports to lookup locations relative to the `baseUrl` if set, or to the tsconfig file itself otherwise. There is a larger coverage of paths in [the moduleResolution reference page](https://www.typescriptlang.org/docs/handbook/modules/reference.html#paths).
+
+一系列条目，用于将导入重新映射到相对于 `baseUrl` 的查找位置（如果已设置），否则相对于 tsconfig 文件本身。有关路径的更多内容，请参阅 [模块解析参考页面](https://www.typescriptlang.org/docs/handbook/modules/reference.html#paths)。
+
+`paths` lets you declare how TypeScript should resolve an import in your `require/imports`.
+
+`paths` 让你声明 TypeScript 应该如何解析你的 `require/imports` 中的导入。
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "jquery": ["./vendor/jquery/dist/jquery"]
+    }
+  }
+}
+```
+
+This would allow you to be able to write `import "jquery"`, and get all of the correct typing locally.
+
+这将允许你编写 `import "jquery"`，并在本地获得所有正确的类型。
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+        "app/*": ["./src/app/*"],
+        "config/*": ["./src/app/_config/*"],
+        "environment/*": ["./src/environments/*"],
+        "shared/*": ["./src/app/_shared/*"],
+        "helpers/*": ["./src/helpers/*"],
+        "tests/*": ["./src/tests/*"]
+    },
+  }
+}
+```
+
+In this case, you can tell the TypeScript file resolver to support a number of custom prefixes to find code.
+
+在这种情况下，你可以告诉 TypeScript 文件解析器支持多个自定义前缀来查找代码。
+
+Note that this feature does not change how import paths are emitted by `tsc`, so `paths` should only be used to inform TypeScript that another tool has this mapping and will use it at runtime or when bundling.
+
+请注意，此功能不会更改 `tsc` 编译的导入路径，因此 `paths` 仅应用于通知 TypeScript 另一个工具具有此映射，并将在运行时或打包时使用它。(==:pill:**就是说tsconfig.json中的paths仅仅通知TypeScript，运用时或者打包时有这样的映射关系，并不在编译代码时实际转换处理这个映射关系，这个映射关系的处理时交给其他打包工具或者运行时配置来解决的**==)
