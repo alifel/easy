@@ -300,3 +300,56 @@ Specifies an allowlist of files to include in the program. An error occurs if an
 This is useful when you only have a small number of files and don’t need to use a glob to reference many files. If you need that then use `include`.
 
 当你只有少量文件，不需要使用通配符来引用多个文件时，这个选项很有用。如果你需要引用大量文件，那么应该使用 include。
+
+## Types - `types`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#types>*==)
+
+By default all visible ”`@types`” packages are included in your compilation. Packages in `node_modules/@types` of any enclosing folder are considered visible. For example, that means packages within `./node_modules/@types/`, `../node_modules/@types/`, `../../node_modules/@types/`, and so on.
+
+默认情况下，所有可见的 "@types" 包都会被包含在你的编译中。任何enclosing文件夹中的 `node_modules/@types` 中的包都被视为可见。例如，这意味着 `./node_modules/@types/`、`../node_modules/@types/`、`../../node_modules/@types/` 等目录中的包。
+
+If `types` is specified, only packages listed will be included in the global scope. For instance:
+
+如果指定了 `types`，则只有列出的包会被包含在全局作用域中。例如：
+
+```json
+{
+  "compilerOptions": {
+    "types": ["node", "jest", "express"]
+  }
+}
+```
+
+This `tsconfig.json` file will only include `./node_modules/@types/node`, `./node_modules/@types/jest` and `./node_modules/@types/express`. Other packages under `node_modules/@types/*` will not be included.
+
+这个 `tsconfig.json` 文件将只包含 `./node_modules/@types/node`、`./node_modules/@types/jest` 和 `./node_modules/@types/express`。`node_modules/@types/*` 下的其他包将不会被包含。
+
+### What does this affect?
+
+This option does not affect how `@types/*` are included in your application code, for example if you had the above `compilerOptions` example with code like:
+
+这个选项不会影响 `@types/*` 在你的应用程序代码中如何被包含，例如，如果你有上面的 `compilerOptions` 示例，并且代码如下：
+
+```js
+import * as moment from "moment";
+moment().format("MMMM Do YYYY, h:mm:ss a");
+```
+
+The moment import would be fully typed.
+
+moment 导入将会被完全类型化。
+
+When you have this option set, by not including a module in the `types` array it:
+
+- Will not add globals to your project (e.g `process` in node, or `expect` in Jest)
+- Will not have exports appear as auto-import recommendations
+
+当你设置了这个选项，通过不在 `types` 数组中包含一个模块，它：
+
+- 不会向你的项目添加全局变量（例如 node 中的 `process`，或 Jest 中的 `expect`）
+- 不会让导出出现在自动导入建议中
+
+This feature differs from `typeRoots` in that it is about specifying only the exact types you want included, whereas `typeRoots` supports saying you want particular folders.
+
+这个特性与 `typeRoots` 的不同之处在于，它是关于只指定你想包含的确切类型，而 `typeRoots` 支持指定你想要的特定文件夹。
