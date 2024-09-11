@@ -1,36 +1,8 @@
-# 手快
+# nginx
 
 ## sudo nginx -s reload
 
 重新载入nginx
-
-## nohup java -jar server-0.0.1-SNAPSHOT.jar &
-
-后台启动jar包，启动后，ctrol+c退出即可，程序仍然在执行
-
-## ps -ef | grep "java"
-
-查看进程id，一般第二列，这里是根据程序的关键字“java”
-
-## kill -9 pid
-
-强制杀死进程，不+ -9不强制
-
-## docker 启动mysql
-
-```shell
-docker run -d --name mysql-product -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456Mysql --restart=unless-stopped mysql
-```
-
--d 后端执行
--e 设置环境变量
---restart=unless-stopped 一直重启，除非用户明确停止
-
-## docker 启动mongodb
-
-```shell
-docker run --name mongo-dev -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=123456Mongodb -d mongo
-```
 
 ## nginx反向代理配置
 
