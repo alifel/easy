@@ -1,6 +1,6 @@
 # tsconfig.json
 
-## Root Dir - rootDir
+## Root Dir - `rootDir`
 
 (==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#rootDir>*==)
 
@@ -83,7 +83,7 @@ It would be an error to specify `rootDir` as `core` and `include` as `*` because
 
 将 `rootDir` 指定为 `core` 并将 `include` 指定为`*`将会导致错误，因为它创建了一个需要在 outDir 之外发出的文件（helpers.ts，即 `../helpers.js`）。
 
-## Strict - strict
+## Strict - `strict`
 
 (==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#strict>*==)
 
@@ -118,3 +118,75 @@ Another possibility is when you are migrating between TypeScript releases and th
 Note, that if these issues come from the TypeScript standard library you can replace the library using [TypeScript 4.5’s lib replacement](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#supporting-lib-from-node_modules) technique.
 
 注意，如果这些问题来自 TypeScript 标准库，你可以使用 [TypeScript 4.5’s lib replacement](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-5.html#supporting-lib-from-node_modules)技术。
+
+## Out Dir - `outDir`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#outDir>*==)
+
+If specified, `.js` (as well as `.d.ts`, `.js.map`, etc.) files will be emitted into this directory. The directory structure of the original source files is preserved; see `rootDir` if the computed root is not what you intended.
+
+如果指定了 `outDir`，`.js`（以及 `.d.ts`、`.js.map` 等）文件将被输出到这个目录中。原始源文件的目录结构会被保留；如果计算得到的根目录不是你想要的，请参考 `rootDir` 选项。
+
+If not specified, `.js` files will be emitted in the same directory as the `.ts` files they were generated from:
+
+如果未指定 `outDir`，`.js` 文件将被输出到与生成它们的 `.ts` 文件相同的目录中：
+
+```shell
+$ tsc
+example
+├── index.js
+└── index.ts
+```
+
+With a `tsconfig.json` like this:
+
+使用这样的 `tsconfig.json`：
+
+```json
+{
+  "compilerOptions": {
+    "outDir": "./dist"
+  }
+}
+```
+
+Running `tsc` with these settings moves the files into the specified `dist` folder:
+
+使用这些设置运行 `tsc` 会将文件移动到指定的 `dist` 文件夹中：
+
+```shell
+$ tsc
+example
+├── dist
+│   └── index.js
+├── index.ts
+└── tsconfig.json
+```
+
+## Out File - `outFile`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#outFile>*==)
+
+If specified, all global (non-module) files will be concatenated into the single output file specified.
+
+如果指定了 outFile，所有全局（non-module）文件将被合并到指定的单个输出文件中。
+
+If `module` is `system` or `amd`, all module files will also be concatenated into this file after all global content.
+
+如果 `module` 设置为 `system` 或 `amd`，所有模块文件也会在所有全局内容之后被合并到这个文件中。
+
+Note: `outFile` cannot be used unless `module` is `None`, `System`, or `AMD`. This option cannot be used to bundle CommonJS or ES6 modules.
+
+注意：除非 `module` 设置为 `None`、`System` 或 `AMD`，否则不能使用 `outFile`。这个选项不能用于打包 CommonJS 或 ES6 模块。
+
+## Out - `out`
+
+(==*来源，官方文档：<https://www.typescriptlang.org/tsconfig/#out>*==)
+
+Use `outFile` instead.
+
+请使用 `outFile` 替代。
+
+The `out` option computes the final file location in a way that is not predictable or consistent. This option is retained for backward compatibility only and is deprecated.
+
+`out` 选项计算最终文件位置的方式是不可预测且不一致的。这个选项仅为了向后兼容而保留，并且已被废弃。
