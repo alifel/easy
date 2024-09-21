@@ -12,7 +12,7 @@ Many operating systems set this value to 7200 seconds (two hours) by default. Fo
 
 If your MongoDB deployment experiences keepalive-related issues, you must alter the keepalive value on all affected systems. This includes all machines running mongod or mongos processes and all machines hosting client processes that connect to MongoDB.
 
-==如果您的 MongoDB 部署遇到与 keepalive 相关的问题，必须更改所有受影响系统上的 keepalive 值。这包括运行 mongod 或 mongos 进程的所有机器以及所有持有客户端进程（连接到MongoDB）的机器。==
+==如果您的 MongoDB 部署遇到与 keepalive 相关的问题，必须更改所有受影响系统上的 keepalive 值。这包括运行 mongod 或 mongos 进程的所有机器以及所有持有客户端进程（连接到MongoDB）的机器。（:pill:特别注意：**对于6.0以上的nodejs驱动，关于客户端的keepalive有新的举措，keepalive被永久开启，初始化时间设置为300秒，具体查看[这](./nodejs客户端keepAlive.md)**）==
 
 **Adjusting the TCP keepalive value:**
 
