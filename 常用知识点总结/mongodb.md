@@ -67,19 +67,19 @@ A unique index on the name field ensures that only one document is created. With
 
 - Other update() operations either update the newly-inserted document or fail due to a unique key collision.In order for other update() operations to update the newly-inserted document, all of the following conditions must be met:
 
-  - The target collection has a unique index that would cause a duplicate key error.
+  - The target collection has a unique index that would cause a duplicate key error.目标集合有唯一索引，这个索引会导致key重复错误
 
-  - The update operation is not updateMany or multi is false.
+  - The update operation is not updateMany or multi is false.更新操作不能是updateMany，或者multi为false
 
-  - The update match condition is either:
+  - The update match condition is either 更新匹配条件是下面2者之一:
 
-    - A single equality predicate. For example { "fieldA" : "valueA" }
+    - A single equality predicate. For example { "fieldA" : "valueA" } 单个相等的相等谓语
 
-    - A logical AND of equality predicates. For example { "fieldA" : "valueA", "fieldB" : "valueB" }
+    - A logical AND of equality predicates. For example { "fieldA" : "valueA", "fieldB" : "valueB" } 多个相等的相等谓语的逻辑与
 
-  - The fields in the equality predicate match the fields in the unique index key pattern.
+  - The fields in the equality predicate match the fields in the unique index key pattern.更新匹配条件中的相等谓语的field要匹配唯一索引中的field（==:pill:**自己总结完全匹配，包括数量**==）
 
-  - The update operation does not modify any fields in the unique index key pattern.
+  - The update operation does not modify any fields in the unique index key pattern.更新操作不能修改任何唯一索引中涉及的field
 
   The following table shows examples of upsert operations that, when a key collision occurs, either result in an update or fail.
 
