@@ -28,3 +28,64 @@ db.myCollection.findAndModify( {
 
 After the findAndModify operations are complete, it is guaranteed that a and b in both documents are set to 2.
 
+**关于upset的并发控制，在高并发情况下，update设置upset=true会有并发问题，可能会导致插入相同的文档2次。这个问题可以通过查询条件中放唯一索引解决（防止唯一索引后，同时发生的2个更新，一个成功后，另外一个要么成功插入新数据，要么失败）。**
+
+**建立唯一索引，为了保证2个更新都成功，没有失败的情况发生，做到一下5点，就可以：**
+
+1. 目标集合有唯一索引（能引发重复key错误的）
+2. 更新操作不能时updateMany，或者updateOne设置了multi=true
+3. 更新匹配的条件是下面2条之一：
+   - 单独的相等谓语判断，如 { "fieldA" : "valueA" }
+   - 相等谓语的逻辑与，如 { "fieldA" : "valueA", "fieldB" : "valueB" }
+4. 在更新匹配条件中的相等谓语的field要匹配唯一索引中的field。（比如更新条件中有2个使用了逻辑与的相等谓语，那么要匹配一个同时包含这2个谓语的唯一索引）
+5. 更新操作不能修改任何唯一索引中涉及的field。
+
+官方文档原文：<https://www.mongodb.com/docs/v5.0/reference/method/db.collection.update/#upsert-with-duplicate-values>
+
+Upsert with Duplicate Values
+
+Upserts can create duplicate documents, unless there is a unique index to prevent duplicates.
+
+Consider an example where no document with the name Andy exists and multiple clients issue the following command at roughly the same time:
+
+```shell
+db.people.update(
+   { name: "Andy" },
+   { $inc: { score: 1 } },
+   {
+     upsert: true,
+     multi: true
+   }
+)
+```
+
+If all update() operations finish the query phase before any client successfully inserts data, and there is no unique index on the name field, each update() operation may result in an insert, creating multiple documents with name: Andy.
+
+A unique index on the name field ensures that only one document is created. With a unique index in place, the multiple update() operations now exhibit the following behavior:
+
+- Exactly one update() operation will successfully insert a new document.
+
+- Other update() operations either update the newly-inserted document or fail due to a unique key collision.In order for other update() operations to update the newly-inserted document, all of the following conditions must be met:
+
+  - The target collection has a unique index that would cause a duplicate key error.
+
+  - The update operation is not updateMany or multi is false.
+
+  - The update match condition is either:
+
+    - A single equality predicate. For example { "fieldA" : "valueA" }
+
+    - A logical AND of equality predicates. For example { "fieldA" : "valueA", "fieldB" : "valueB" }
+
+  - The fields in the equality predicate match the fields in the unique index key pattern.
+
+  - The update operation does not modify any fields in the unique index key pattern.
+
+  The following table shows examples of upsert operations that, when a key collision occurs, either result in an update or fail.
+
+  |Unique Index Key Pattern|Update Operation|Result|
+  |--|--|--|
+  |`{ name : 1 }`|`db.people.updateOne({ name: "Andy" },{ $inc: { score: 1 } }, { upsert: true })`|The score field of the matched document is incremented by 1.|
+  |`{ name : 1 }`|`db.people.updateOne({ name: { $ne: "Joe" } },{ $set: { name: "Andy" } },{ upsert: true })`|The operation fails because it modifies the field in the unique index key pattern (name).|
+  |`{ name : 1 }`|`db.people.updateOne({ name: "Andy", email: "andy@xyz.com" }, { $set: { active: false } },{ upsert: true })`|The operation fails because the equality predicate fields (name, email) do not match the index key field (name).|
+  
