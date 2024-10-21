@@ -61,7 +61,6 @@ Using the w option, the following w: `<value>` write concerns are available:
 |:---|:---|
 |"majority"|Requests acknowledgment that write operations have been durably committed to the calculated majority of the data-bearing voting members (i.e. primary and secondaries with members[n].votes greater than 0). { w: "majority" } is the default write concern for most MongoDB deployments. See Implicit Default Write Concern.<br/>请求确认写操作已持久地提交到数据承载投票成员的计算多数（即具有大于0的成员[n].votes的主节点和次节点）。{ w: "majority" }是大多数MongoDB部署的默认写关注。参见隐式默认写关注。<br/>|
 
-
 Calculating Majority for Write Concern
 
 > **TIP**
