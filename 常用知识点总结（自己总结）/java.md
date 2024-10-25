@@ -11,3 +11,7 @@
 ## kill -9 pid
 
 强制杀死进程，不+ -9不强制
+
+## java相关框架，ide，版本的人群占比
+
+<https://www.jetbrains.com/lp/devecosystem-2023/java/>
