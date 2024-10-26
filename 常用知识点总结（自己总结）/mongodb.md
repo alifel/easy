@@ -88,9 +88,21 @@ A unique index on the name field ensures that only one document is created. With
   |`{ name : 1 }`|`db.people.updateOne({ name: "Andy" },{ $inc: { score: 1 } }, { upsert: true })`|The score field of the matched document is incremented by 1.|
   |`{ name : 1 }`|`db.people.updateOne({ name: { $ne: "Joe" } },{ $set: { name: "Andy" } },{ upsert: true })`|The operation fails because it modifies the field in the unique index key pattern (name).|
   |`{ name : 1 }`|`db.people.updateOne({ name: "Andy", email: "andy@xyz.com" }, { $set: { active: false } },{ upsert: true })`|The operation fails because the equality predicate fields (name, email) do not match the index key field (name).|
-  
+
+---
+
 ## 默认写关注
 
 5.0开始，默认写关注`{w: majority}`
 
 官方文档引用 <https://www.mongodb.com/docs/v5.0/reference/write-concern/#implicit-default-write-concern>
+
+---
+
+## 对于独立运行的mongodb，只要journaling开启，则journal默认写入硬盘，所以不需要担心丢失的问题。journaling在64位系统下，默认开启的
+
+官方文档：
+
+1. <https://www.mongodb.com/docs/v5.0/reference/configuration-options/#mongodb-setting-storage.journal.enabled>
+
+2. <https://www.mongodb.com/docs/v5.0/reference/write-concern/#standalone>
