@@ -106,3 +106,11 @@ A unique index on the name field ensures that only one document is created. With
 1. <https://www.mongodb.com/docs/v5.0/reference/configuration-options/#mongodb-setting-storage.journal.enabled>
 
 2. <https://www.mongodb.com/docs/v5.0/reference/write-concern/#standalone>
+
+---
+
+## mongodb的驱动会等待acknowledgement后，才返回成功，并且写关注的w的值，决定了要多少成员复制数据后，才返回成功
+
+从这个文档（<https://www.mongodb.com/docs/v5.0/reference/read-concern-local/#example>）t<sub>3</sub>时刻的描述可以看出，“Primary is aware of successful replication to Secondary 1 and sends acknowledgement to client”，发送acknowledgement给client。
+
+从这个文档（<https://www.mongodb.com/docs/v5.0/reference/write-concern/#mongodb-writeconcern-writeconcern.-number->）的“Requests no acknowledgment of the write operation. However, w: 0 may return information about socket exceptions and networking errors to the application.”可以可以推断出acknowledgment后，驱动才会返回信息给应用程序。
