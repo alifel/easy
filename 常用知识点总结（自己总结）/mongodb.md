@@ -89,3 +89,8 @@ A unique index on the name field ensures that only one document is created. With
   |`{ name : 1 }`|`db.people.updateOne({ name: { $ne: "Joe" } },{ $set: { name: "Andy" } },{ upsert: true })`|The operation fails because it modifies the field in the unique index key pattern (name).|
   |`{ name : 1 }`|`db.people.updateOne({ name: "Andy", email: "andy@xyz.com" }, { $set: { active: false } },{ upsert: true })`|The operation fails because the equality predicate fields (name, email) do not match the index key field (name).|
   
+## 默认写关注
+
+5.0开始，默认写关注`{w: majority}`
+
+官方文档引用 <https://www.mongodb.com/docs/v5.0/reference/write-concern/#implicit-default-write-concern>
