@@ -1,5 +1,7 @@
 # Read Concern "local"
 
+(==官方原文地址：<https://www.mongodb.com/docs/v5.0/reference/read-concern-local/>==)
+
 A query with read concern "local" returns data from the instance with no guarantee that the data has been written to a majority of the replica set members (i.e. may be rolled back).
 
 一个带有读关注"local"的查询从实例返回数据，没有保证数据已写入大多数副本集成员（即可能被回滚）。
@@ -12,7 +14,7 @@ Regardless of the read concern level, the most recent data on a node may not ref
 
 无论读关注级别如何，节点上的最新数据可能不反映系统中的最新数据版本。
 
-## Availability 
+## Availability
 
 Read concern "local" is available for use with or without causally consistent sessions and transactions.
 
@@ -46,8 +48,28 @@ Consider the following timeline of a write operation Write <sub>0</sub> to a thr
 > - Write <sub>prev</sub>在Write <sub>0</sub>之前写入
 > - Write <sub>0</sub>之后没有其他写操作
 
-![image](./images//read-concern-write-timeline.svg)
+![image](./images/read-concern-write-timeline.svg)
 
-|Time|Event|Most Recent Write|Most Recent w: "majority" write|
+|Time|Event|Most Recent Write|Most Recent Write with "majority" concern|
 |---|---|---|---|
-|t<sub>0</sub>|Write <sub>0</sub>|Write <sub>0</sub>|Write <sub>0</sub>|
+|t <sub>0</sub>|Primary applies Write <sub>0</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>prev</sub><br/>**Secondary 2**: Write <sub>prev</sub>|**Primary**: Write <sub>prev</sub><br/>**Secondary 1**: Write <sub>prev</sub><br/>**Secondary 2**: Write <sub>prev</sub>|
+|t <sub>1</sub>|Secondary <sub>1</sub> applies write <sub>0</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>prev</sub>|**Primary**: Write <sub>prev</sub><br/>**Secondary 1**: Write <sub>prev</sub><br/>**Secondary 2**: Write <sub>prev</sub>|
+|t <sub>2</sub>|Secondary <sub>2</sub> applies write <sub>0</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>0</sub>|**Primary**: Write <sub>prev</sub><br/>**Secondary 1**: Write <sub>prev</sub><br/>**Secondary 2**: Write <sub>prev</sub>|
+|t <sub>3</sub>|Primary is aware of successful replication to Secondary <sub>1</sub> and sends acknowledgement to client|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>0</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>prev</sub><br/>**Secondary 2**: Write <sub>prev</sub>|
+|t <sub>4</sub>|Primary is aware of successful replication to Secondary <sub>2</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>0</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>prev</sub><br/>**Secondary 2**: Write <sub>prev</sub>|
+|t <sub>5</sub>|Secondary <sub>1</sub> receives notice (through regular replication mechanism) to update its snapshot of its most recent w: "majority" write|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>0</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>prev</sub>|
+|t <sub>6</sub>|Secondary <sub>2</sub> receives notice (through regular replication mechanism) to update its snapshot of its most recent w: "majority" write|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>0</sub>|**Primary**: Write <sub>0</sub><br/>**Secondary 1**: Write <sub>0</sub><br/>**Secondary 2**: Write <sub>0</sub>|
+
+Then, the following tables summarizes the state of the data that a read operation with "local" read concern would see at time T.
+
+然后，以下表格总结了在时间 T 时，带有“local”读关注的数据状态。
+
+![imgae](./images/read-concern-write-timeline.svg)
+
+|Read Target|Time T|State of Data|
+|---|---|---|
+|Primary|After t <sub>0</sub>|Data reflects Write <sub>0</sub>|
+|Secondary <sub>1</sub>|Before t <sub>1</sub>|Data reflects Write <sub>prev</sub>|
+|Secondary <sub>1</sub>|After t <sub>1</sub>|Data reflects Write <sub>0</sub>|
+|Secondary <sub>2</sub>|Before t <sub>2</sub>|Data reflects Write <sub>prev</sub>|
+|Secondary <sub>2</sub>|After t <sub>2</sub>|Data reflects Write <sub>0</sub>|
