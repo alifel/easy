@@ -4,6 +4,10 @@
 
 后台启动jar包，启动后，ctrol+c退出即可，程序仍然在执行
 
+## nohup java -jar your-application.jar > output.log 2>&1 &
+
+后台启动jar包，并把日志输出到output.log文件中
+
 ## ps -ef | grep "java"
 
 查看进程id，一般第二列，这里是根据程序的关键字“java”
